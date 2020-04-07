@@ -33,6 +33,12 @@ namespace AltPro.BackTracker
             services.AddDbContextPool<AppDBContext>(options => options.UseSqlServer(Configuration.GetConnectionString("TaskReportDBConection")));
             services.AddControllersWithViews();
 
+            services.AddIdentity<IdentityUser, IdentityRole>(options =>
+            {
+                options.Password.RequiredLength = 8;
+                options.Password.RequiredUniqueChars = 2;
+            }).AddEntityFrameworkStores<AppDBContext>();
+
             services.Configure<IdentityOptions>(options =>
             {
                 options.Password.RequiredLength = 8;
