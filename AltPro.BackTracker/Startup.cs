@@ -38,9 +38,9 @@ namespace AltPro.BackTracker
             });
 
             services.AddMvc(options => {
-                var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+                //var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
                 options.EnableEndpointRouting = false;
-                options.Filters.Add(new AuthorizeFilter(policy));
+                //options.Filters.Add(new AuthorizeFilter(policy));
             });
         }
 
@@ -60,7 +60,7 @@ namespace AltPro.BackTracker
 
             app.UseStaticFiles();
 
-            app.UseAuthentication();
+            //app.UseAuthentication();
 
             app.UseMvc(routes => 
             { 
