@@ -23,6 +23,13 @@ namespace AltPro.BackTracker.Controllers
             this.signInManager = signInManager;
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Logout()
+        {
+            await signInManager.SignOutAsync();
+            return RedirectToAction("index", "home");
+        }
+
         [HttpGet]
         public IActionResult Profile()
         {
@@ -52,7 +59,7 @@ namespace AltPro.BackTracker.Controllers
                 if (result.Succeeded)
                 {
                     await signInManager.SignInAsync(user, isPersistent: false);
-                    return RedirectToAction("index", "home");
+                    return RedirectToAction("login", "account");
                 }
 
                 foreach (var error in result.Errors)
