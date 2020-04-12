@@ -4,9 +4,9 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace AltPro.BackTracker.Models
+namespace AltPro.BackTracker.ViewModels
 {
-    public class TaskNewTaskModel
+    public class TaskViewModel
     {
         [Required]
         public int TaskID { get; set; }
@@ -17,6 +17,5 @@ namespace AltPro.BackTracker.Models
 
         public string TaskPriority { get; set; }
         public string TaskStatus { get; set; }
-
     }
 }
