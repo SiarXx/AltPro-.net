@@ -13,9 +13,9 @@ namespace AltPro.BackTracker.Models
         {
             reportList = new List<Report>()
                 {
-                    new Report() {Id = 1, Title = "Cos nie dziala", Assigness = "Mathew", Priority = "Important",  Status = "TODO"},
-                    new Report() {Id = 2, Title = "Tralalalallalalalalala", Assigness = "Mathew", Priority = "Important",  Status = "DONE"},
-                    new Report() {Id = 3, Title = "Opisssssssssssssssss", Assigness = "Mathew", Priority = "Important",  Status = "TODO"}
+                    new Report() {Id = 1, Title = "Cos nie dziala", Assigness = "Mathew", Priority = "Important",  Status = "TODO", Time = "1 days ago"},
+                    new Report() {Id = 2, Title = "Tralalalallalalalalala", Assigness = "John", Priority = "Important",  Status = "DONE", Time = "3 day ago"},
+                    new Report() {Id = 3, Title = "Opisssssssssssssssss", Assigness = "Jack", Priority = "Important",  Status = "TODO", Time = "2 days ago"}
                 };
         }
 

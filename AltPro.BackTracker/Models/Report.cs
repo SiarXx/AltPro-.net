@@ -12,6 +12,7 @@ namespace AltPro.BackTracker.Models
         public string Priority { get; set; }
         public string Status { get; set; }
         public string Assigness { get; set; }
-
+        public string Time { get; set; }
+        public string Description { get; set; }
     }
 }

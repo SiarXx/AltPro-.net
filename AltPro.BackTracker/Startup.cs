@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AltPro.BackTracker.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -42,6 +43,8 @@ namespace AltPro.BackTracker
                 options.EnableEndpointRouting = false;
                 //options.Filters.Add(new AuthorizeFilter(policy));
             });
+
+            services.AddSingleton<IReportRepository, MockReportRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
