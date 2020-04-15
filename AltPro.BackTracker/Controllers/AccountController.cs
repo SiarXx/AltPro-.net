@@ -37,12 +37,6 @@ namespace AltPro.BackTracker.Controllers
         }
 
         [HttpGet]
-        public IActionResult Profile()
-        {
-            return View();
-        }
-
-        [HttpGet]
         [AllowAnonymous]
         public IActionResult Register()
         {

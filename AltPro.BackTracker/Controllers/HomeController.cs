@@ -20,6 +20,12 @@ namespace AltPro.BackTracker.Controllers
             _logger = logger;
         }
 
+        [HttpGet]
+        public IActionResult Profile()
+        {
+            return View();
+        }
+
         public IActionResult Index()
         {
             return View();
