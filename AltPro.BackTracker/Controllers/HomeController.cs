@@ -13,19 +13,20 @@ namespace AltPro.BackTracker.Controllers
     [AllowAnonymous]
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private IReportRepository _reportRepository;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(IReportRepository reportRepository)
         {
-            _logger = logger;
+            _reportRepository = reportRepository;
+        }
+
+        public IActionResult ReportList()
+        {
+            var model = _reportRepository.GetAllReports();
+            return View(model);
         }
 
         public IActionResult Index()
-        {
-            return View();
-        }
-
-        public IActionResult Privacy()
         {
             return View();
         }
