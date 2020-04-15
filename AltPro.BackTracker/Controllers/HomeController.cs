@@ -7,28 +7,39 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using AltPro.BackTracker.Models;
 using Microsoft.AspNetCore.Authorization;
+using AltPro.BackTracker.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using BackTracker.Models;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Http;
+using System.Security;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNet.Identity;
 
 namespace AltPro.BackTracker.Controllers
 {
-    [AllowAnonymous]
+    [Authorize]
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ILogger<HomeController> logger;
+        private readonly Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> userManager;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> userManager)
         {
-            _logger = logger;
+            this.logger = logger;
+            this.userManager = userManager;
         }
 
         [HttpGet]
-        public IActionResult Profile()
+        public async Task<IActionResult> Profile()
         {
-            var currentUser = User.Identity;
-            return View(currentUser);
+            var userId = User.Identity.GetUserId();
+            var user = await userManager.Users.FirstOrDefaultAsync(e => e.Id == userId);
+
+            return View(user);
         }
 
+        [AllowAnonymous]
         public IActionResult Index()
         {
             return View();
@@ -39,6 +50,7 @@ namespace AltPro.BackTracker.Controllers
             return View();
         }
 
+        [AllowAnonymous]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
