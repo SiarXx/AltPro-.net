@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using AltPro.BackTracker.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using BackTracker.Models;
 
 namespace AltPro.BackTracker.Controllers
 {
@@ -23,7 +25,8 @@ namespace AltPro.BackTracker.Controllers
         [HttpGet]
         public IActionResult Profile()
         {
-            return View();
+            var currentUser = User.Identity;
+            return View(currentUser);
         }
 
         public IActionResult Index()
