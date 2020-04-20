@@ -36,7 +36,19 @@ namespace AltPro.BackTracker.Controllers
             var userId = User.Identity.GetUserId();
             var user = await userManager.Users.FirstOrDefaultAsync(e => e.Id == userId);
 
-            return View(user);
+            if(user == null)
+            {
+                Response.StatusCode = 404;
+                return View("UserNotFound", userId);
+            }
+
+            ProfileDetailsViewModel profileDetailsViewModel = new ProfileDetailsViewModel()
+            {
+                User = user,
+                PageTitle = "User Profile"
+            };
+
+            return View(profileDetailsViewModel);
         }
 
         [AllowAnonymous]
