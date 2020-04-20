@@ -51,6 +51,21 @@ namespace AltPro.BackTracker.Controllers
             return View(profileDetailsViewModel);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Edit()
+        {
+            var userId = User.Identity.GetUserId();
+            var user = await userManager.Users.FirstOrDefaultAsync(e => e.Id == userId);
+
+            ProfileEditViewModel profileEditViewModel = new ProfileEditViewModel()
+            {
+                Id = userId,
+                Email = user.Email,
+                ExistingPhotoPath = user.PhotoPath
+            };
+            return View(profileEditViewModel);
+        }
+
         [AllowAnonymous]
         public IActionResult Index()
         {

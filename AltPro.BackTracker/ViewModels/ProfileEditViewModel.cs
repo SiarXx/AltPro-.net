@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace AltPro.BackTracker.ViewModels
 {
-    public class PrfofileEditViewModel : RegisterViewModel
+    public class ProfileEditViewModel : RegisterViewModel
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
         public string ExistingPhotoPath { get; set; }
     }
 }
