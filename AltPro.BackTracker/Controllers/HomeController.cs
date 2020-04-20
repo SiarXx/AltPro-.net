@@ -15,6 +15,8 @@ using Microsoft.AspNetCore.Http;
 using System.Security;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNet.Identity;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
 
 namespace AltPro.BackTracker.Controllers
 {
@@ -22,9 +24,14 @@ namespace AltPro.BackTracker.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> logger;
+        private readonly IWebHostEnvironment webHostEnvironment;
         private readonly Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> userManager;
+        private readonly AppDBContext context;
 
-        public HomeController(ILogger<HomeController> logger, Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> userManager)
+        public HomeController(ILogger<HomeController> logger,
+            IWebHostEnvironment webHostEnvironment,
+            Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> userManager,
+            AppDBContext context)
         {
             this.logger = logger;
             this.userManager = userManager;
@@ -66,6 +73,35 @@ namespace AltPro.BackTracker.Controllers
             return View(profileEditViewModel);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Edit(ProfileEditViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var userId = User.Identity.GetUserId();
+                var user = await userManager.Users.FirstOrDefaultAsync(e => e.Id == userId);
+
+                user.Email = model.Email;
+                
+                if(model.Photo != null)
+                {
+                    if(model.ExistingPhotoPath != null)
+                    {
+                        string filePath = Path.Combine(webHostEnvironment.WebRootPath,
+                            "images", model.ExistingPhotoPath);
+                        System.IO.File.Delete(filePath);
+                    }
+                    user.PhotoPath = ProcessUploadFile(model);
+                }
+
+                var usser = context.Users.Attach(user);
+                usser.State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                context.SaveChanges();
+                return RedirectToAction("Profile");
+            }
+            return View();
+        }
+
         [AllowAnonymous]
         public IActionResult Index()
         {
@@ -82,6 +118,24 @@ namespace AltPro.BackTracker.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        private string ProcessUploadFile(RegisterViewModel model)
+        {
+            string uniqueFileName = null;
+            if (model.Photo != null)
+            {
+                string uplodasFolder = Path.Combine(webHostEnvironment.WebRootPath, "images");
+                uniqueFileName = Guid.NewGuid().ToString() + "_" + model.Photo.FileName;
+                string filePath = Path.Combine(uplodasFolder, uniqueFileName);
+
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    model.Photo.CopyTo(fileStream);
+                }
+            }
+
+            return uniqueFileName;
         }
     }
 }
