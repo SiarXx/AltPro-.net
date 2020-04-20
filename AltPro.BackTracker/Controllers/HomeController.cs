@@ -35,6 +35,7 @@ namespace AltPro.BackTracker.Controllers
         {
             this.logger = logger;
             this.userManager = userManager;
+            this.webHostEnvironment = webHostEnvironment;
         }
 
         [HttpGet]
@@ -59,7 +60,7 @@ namespace AltPro.BackTracker.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Edit()
+        public async Task<ViewResult> Edit()
         {
             var userId = User.Identity.GetUserId();
             var user = await userManager.Users.FirstOrDefaultAsync(e => e.Id == userId);
@@ -97,7 +98,7 @@ namespace AltPro.BackTracker.Controllers
                 var usser = context.Users.Attach(user);
                 usser.State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                 context.SaveChanges();
-                return RedirectToAction("Profile");
+                return RedirectToAction("Index");
             }
             return View();
         }
