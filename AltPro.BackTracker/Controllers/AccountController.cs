@@ -54,7 +54,8 @@ namespace AltPro.BackTracker.Controllers
                 var user = new ApplicationUser
                 {
                     UserName = model.Email,
-                    Email = model.Email
+                    Email = model.Email,
+                    PhotoPath = uniqueFileName
                 };
                 var result = await userManager.CreateAsync(user, model.Password);
 

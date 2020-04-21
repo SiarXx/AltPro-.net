@@ -33,11 +33,13 @@ namespace AltPro.BackTracker.Controllers
         public HomeController(ILogger<HomeController> logger,
             IWebHostEnvironment webHostEnvironment,
             Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> userManager,
-            AppDBContext context)
+            AppDBContext context,
+            IReportRepository reportRepository)
         {
             this.logger = logger;
             this.userManager = userManager;
             this.webHostEnvironment = webHostEnvironment;
+            _reportRepository = reportRepository;
         }
 
         [HttpGet]
@@ -104,11 +106,6 @@ namespace AltPro.BackTracker.Controllers
             }
             return View();
         }       
-        
-        public HomeController(IReportRepository reportRepository)
-        {
-            _reportRepository = reportRepository;
-        }
 
         public IActionResult ReportList()
         {
