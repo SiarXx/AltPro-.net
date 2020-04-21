@@ -22,7 +22,9 @@ namespace AltPro.BackTracker.Controllers
 {
     [Authorize]
     public class HomeController : Controller
+
     {
+        private IReportRepository _reportRepository;
         private readonly ILogger<HomeController> logger;
         private readonly IWebHostEnvironment webHostEnvironment;
         private readonly Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> userManager;
@@ -101,15 +103,20 @@ namespace AltPro.BackTracker.Controllers
                 return RedirectToAction("Index");
             }
             return View();
-        }
-
-        [AllowAnonymous]
-        public IActionResult Index()
+        }       
+        
+        public HomeController(IReportRepository reportRepository)
         {
-            return View();
+            _reportRepository = reportRepository;
         }
 
-        public IActionResult Privacy()
+        public IActionResult ReportList()
+        {
+            var model = _reportRepository.GetAllReports();
+            return View(model);
+        }
+
+        public IActionResult Index()
         {
             return View();
         }
