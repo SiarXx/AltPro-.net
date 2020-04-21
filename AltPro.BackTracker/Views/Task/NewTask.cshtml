@@ -7,8 +7,6 @@
 }
 
 <h1>NewTask</h1>
-
-<h4>TaskViewModel</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -16,7 +14,7 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="TaskID" class="control-label"></label>
-                <input asp-for="TaskID" class="form-control" value="Sample" readonly="readonly"/>
+                <input asp-for="TaskID" class="form-control" readonly="readonly"/>
                 <span asp-validation-for="TaskID" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -32,11 +30,6 @@
             <div class="form-group">
                 <label asp-for="TaskPriority" class="control-label"></label>
                 @Html.DropDownList("Priority",new SelectList(Enum.GetValues(typeof(ETaskPriority))),"Select",new { @class = "form-control"})
-            </div>
-            <div class="form-group">
-                <label asp-for="TaskStatus" class="control-label"></label>
-                <input asp-for="TaskStatus" class="form-control" />
-                <span asp-validation-for="TaskStatus" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
