@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AltPro.BackTracker.Models;
+using BackTracker.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -29,7 +31,10 @@ namespace AltPro.BackTracker
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
+            services.AddDbContextPool<AppDBContext>(options => options.UseSqlServer(Configuration.GetConnectionString("TaskReportDBConection")));
+
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddEntityFrameworkStores<AppDBContext>();
 
             services.Configure<IdentityOptions>(options =>
             {
@@ -38,10 +43,12 @@ namespace AltPro.BackTracker
             });
 
             services.AddMvc(options => {
-                //var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+                var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
                 options.EnableEndpointRouting = false;
-                //options.Filters.Add(new AuthorizeFilter(policy));
+                options.Filters.Add(new AuthorizeFilter(policy));
             });
+
+            services.AddSingleton<IReportRepository, MockReportRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -60,7 +67,7 @@ namespace AltPro.BackTracker
 
             app.UseStaticFiles();
 
-            //app.UseAuthentication();
+            app.UseAuthentication();
 
             app.UseMvc(routes => 
             { 

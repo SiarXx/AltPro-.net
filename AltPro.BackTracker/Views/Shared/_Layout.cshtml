@@ -1,4 +1,4 @@
-﻿
+﻿@inject SignInManager<ApplicationUser> signInManager;
 <!DOCTYPE html>
 
 <html>
@@ -32,6 +32,7 @@
 <body>
     <div class="container">
         <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+
             <a class="navbar-brand" asp-action="Index" asp-controller="Home">
                 <img src="~/images/donut_render2.jpg" alt="Alternate Text" height="30" width="30" />
             </a>
@@ -39,22 +40,56 @@
             <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#collapsibleNavbar">
                 <span class="navbar-toggler-icon"></span>
             </button>
+
             <div class="collapse navbar-collapse" id="collapsibleNavbar">
+
                 <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a asp-action="Profile" asp-controller="Home" class="nav-link">Profile</a>
+                    </li>
                     <li class="nav-item">
                         <a asp-action="Projects" asp-controller="Home" class="nav-link">Projects</a>
                     </li>
+                    <li class="nav-item">
+                        <a asp-action="ReportList" asp-controller="home" class="nav-link">Report list</a>
+                    </li>
+                    <li class="nav-item">
+                        <a asp-action="CreateReport" asp-controller="home" class="nav-link">Create report</a>
+                    </li>
                 </ul>
+
+                <ul class="navbar-nav ml-auto">
+                    @if (signInManager.IsSignedIn(User))
+                    {
+                        <li class="nav-item">
+                            <form asp-action="logout" asp-controller="Account" method="post">
+                                <button type="submit" class="nav-link btn btn-link py-0"
+                                        style="width:auto">
+                                    Logout @User.Identity.Name
+                                </button>
+                            </form>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item">
+                            <a asp-action="register" asp-controller="account" class="nav-link">Register</a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-action="login" asp-controller="account" class="nav-link">Login</a>
+                        </li>
+                    }
+                </ul>
+
             </div>
         </nav>
-
-        <div>
-            @RenderBody()
-        </div>
-        @if (IsSectionDefined("Scripts"))
-        {
-            @RenderSection("Scripts", required: true)
-        }
+    <div>
+        @RenderBody()
     </div>
+            @if (IsSectionDefined("Scripts"))
+            {
+                @RenderSection("Scripts", required: true)
+            }
+</div>
 </body>
 </html>
