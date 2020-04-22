@@ -27,6 +27,7 @@ namespace AltPro.BackTracker.Controllers
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
+            this.webHostEnvironment = webHostEnvironment;
         }
 
         [HttpPost]
