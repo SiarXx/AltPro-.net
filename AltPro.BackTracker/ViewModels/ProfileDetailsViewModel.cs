@@ -10,5 +10,6 @@ namespace AltPro.BackTracker.ViewModels
     {
         public ApplicationUser User { get; set; }
         public string PageTitle { get; set; }
+
     }
 }
