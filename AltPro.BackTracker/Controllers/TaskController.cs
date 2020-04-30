@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using AltPro.BackTracker.Models;
+using AltPro.BackTracker.Models.Enums;
 using AltPro.BackTracker.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,7 +26,7 @@ namespace AltPro.BackTracker.Controllers
                 {
                     ModuleName = model.ModuleName,
                     TaskPriority = model.TaskPriority,
-                    TaskState = "dodany",
+                    TaskState = ETaskState.Reported,
                     Description = model.Description,
                     ReporterID = "Tutaj wjebac id zalogowanego"
                 };
