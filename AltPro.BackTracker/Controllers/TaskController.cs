@@ -28,7 +28,7 @@ namespace AltPro.BackTracker.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddReport(TaskViewModel model)
+        public IActionResult AddTask(TaskViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -41,6 +41,8 @@ namespace AltPro.BackTracker.Controllers
                     Description = model.Description,
                     ReporterID = "Tutaj wjebac id zalogowanego"
                 };
+                taskRepository.Add(task);
+                return RedirectToAction("AddTask");
             }
             return View();
         }
