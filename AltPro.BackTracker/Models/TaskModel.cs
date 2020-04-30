@@ -11,15 +11,24 @@ namespace AltPro.BackTracker.Models
     {
         public TaskModel() { }
         public int TaskID { get; set; }
+
+        [Required]
+        public string TaskTitle { get; set; }
+
         [Required]
         public string ModuleName { get; set; }
+
         [Required]
         public string ReporterID { get; set; }
+
         public string AssignedID { get; set; }
+
         [Required]
         public ETaskPriority? TaskPriority { get; set; }
+
         [Required]
         public string Description { get; set; }
+
         [Required]
         public ETaskState? TaskState { get; set; }
      
