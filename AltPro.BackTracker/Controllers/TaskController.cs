@@ -22,7 +22,7 @@ namespace AltPro.BackTracker.Controllers
         TaskViewModel newTask = new TaskViewModel();
 
         [HttpGet]
-        public IActionResult NewTask()
+        public IActionResult AddTask()
         {
             return View(newTask);
         }
@@ -39,7 +39,7 @@ namespace AltPro.BackTracker.Controllers
                     TaskPriority = model.TaskPriority,
                     TaskState = ETaskState.Reported,
                     Description = model.Description,
-                    ReporterID = "Tutaj wjebac id zalogowanego"
+                    ReporterID = "Tutaj id zalogowanego"
                 };
                 taskRepository.Add(task);
                 return RedirectToAction("AddTask");

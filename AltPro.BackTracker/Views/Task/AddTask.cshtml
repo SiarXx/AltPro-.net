@@ -1,15 +1,15 @@
 ﻿@model AltPro.BackTracker.ViewModels.TaskViewModel
 
 @{
-    ViewData["Title"] = "NewTask";
+    ViewData["Title"] = "AddTask";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>NewTask</h1>
+<h1>AddTask</h1>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="NewTask">
+        <form asp-action="AddTask" asp-controller="Task" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="ModuleName" class="control-label"></label>
