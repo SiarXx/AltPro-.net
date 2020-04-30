@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using AltPro.BackTracker.Models;
 using AltPro.BackTracker.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,8 +13,24 @@ namespace AltPro.BackTracker.Controllers
         [HttpGet]
         public IActionResult NewTask()
         {
-            newTask.ReporterID = "SampleReporter2137";
             return View(newTask);
+        }
+
+        [HttpPost]
+        public IActionResult AddReport(TaskViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                TaskModel task = new TaskModel()
+                {
+                    ModuleName = model.ModuleName,
+                    TaskPriority = model.TaskPriority,
+                    TaskState = "dodany",
+                    Description = model.Description,
+                    ReporterID = "Tutaj wjebac id zalogowanego"
+                };
+            }
+            return View();
         }
     }
 

@@ -1,5 +1,4 @@
-﻿@using AltPro.BackTracker.ViewModels;
-@model AltPro.BackTracker.ViewModels.TaskViewModel
+﻿@model AltPro.BackTracker.ViewModels.TaskViewModel
 
 @{
     ViewData["Title"] = "NewTask";
@@ -13,23 +12,17 @@
         <form asp-action="NewTask">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="TaskID" class="control-label"></label>
-                <input asp-for="TaskID" class="form-control" readonly="readonly"/>
-                <span asp-validation-for="TaskID" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="ModuleName" class="control-label"></label>
                 <input asp-for="ModuleName" class="form-control" />
                 <span asp-validation-for="ModuleName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ReporterID" class="control-label"></label>
-                <input asp-for="ReporterID" class="form-control" readonly/>
-                <span asp-validation-for="ReporterID" class="text-danger"></span>
+                <label asp-for="TaskPriority" class="control-label"></label>
+                <select asp-for="TaskPriority" class="custom-select" asp-items="Html.GetEnumSelectList<ETaskPriority>()"></select>
             </div>
             <div class="form-group">
-                <label asp-for="TaskPriority" class="control-label"></label>
-                @Html.DropDownList("Priority",new SelectList(Enum.GetValues(typeof(ETaskPriority))),"Select",new { @class = "form-control"})
+                <label asp-for="Description" class="control-label"></label>
+                <textarea asp-for="Description" class="form-control"></textarea>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

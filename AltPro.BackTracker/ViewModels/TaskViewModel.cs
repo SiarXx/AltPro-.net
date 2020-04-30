@@ -1,4 +1,5 @@
 ﻿using AltPro.BackTracker.Controllers;
+using AltPro.BackTracker.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -9,27 +10,17 @@ namespace AltPro.BackTracker.ViewModels
 {
     public class TaskViewModel
     {
-        [Required]
-        [Display(Name = "ID")]
-        public int TaskID { get; set; }
         [Display(Name = "Module")]
         public string ModuleName { get; set; }
 
         [Required]
-        [Display(Name = "ReporterID")]
-        public string ReporterID { get; set; }
+        [Display(Name ="Priority")]
+        public ETaskPriority? TaskPriority { get; set; }
 
         [Required]
-        [Display(Name ="Priority")]
-        public ETaskPriority TaskPriority { get; set; }
+        [MaxLength(500,ErrorMessage = "Description too long (max 500 znakis)")]
+        [Display(Name = "Description")]
+        public string Description { get; set; }
+    }
 
-        [Display(Name = "Status")]
-        public string TaskStatus { get; set; }
-    }
-    public enum ETaskPriority
-    {
-        low = 1,
-        normal = 2,
-        high = 3
-    }
 }
