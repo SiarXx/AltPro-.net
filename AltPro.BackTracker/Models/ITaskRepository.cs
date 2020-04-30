@@ -15,6 +15,6 @@ namespace AltPro.BackTracker.Models
 
         TaskModel Edit(TaskModel taskModel);
 
-        TaskModel Delete(int id);
+        void Delete(int id);
     }
 }

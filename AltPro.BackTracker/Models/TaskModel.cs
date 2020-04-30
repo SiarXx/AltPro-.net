@@ -9,8 +9,9 @@ namespace AltPro.BackTracker.Models
 {
     public class TaskModel
     {
-        public TaskModel() { }
-        public int TaskID { get; set; }
+        
+        
+        public int TaskModelId { get; set; }
 
         [Required]
         public string TaskTitle { get; set; }
