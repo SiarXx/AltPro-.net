@@ -48,8 +48,6 @@ namespace AltPro.BackTracker
                 options.Filters.Add(new AuthorizeFilter(policy));
             });
 
-            services.AddSingleton<IReportRepository, MockReportRepository>();
-
             services.AddScoped<ITaskRepository, SQLTaskRepository>();
         }
 

@@ -17,6 +17,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNet.Identity;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
+using AltPro.BackTracker.Models.Enums;
 
 namespace AltPro.BackTracker.Controllers
 {
@@ -24,7 +25,7 @@ namespace AltPro.BackTracker.Controllers
     public class HomeController : Controller
 
     {
-        private IReportRepository _reportRepository;
+        private ITaskRepository _reportRepository;
         private readonly ILogger<HomeController> logger;
         private readonly IWebHostEnvironment webHostEnvironment;
         private readonly Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> userManager;
@@ -34,7 +35,7 @@ namespace AltPro.BackTracker.Controllers
             IWebHostEnvironment webHostEnvironment,
             Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> userManager,
             AppDBContext context,
-            IReportRepository reportRepository)
+            ITaskRepository reportRepository)
         {
             this.logger = logger;
             this.userManager = userManager;
@@ -109,7 +110,7 @@ namespace AltPro.BackTracker.Controllers
 
         public IActionResult ReportList()
         {
-            var model = _reportRepository.GetAllReports();
+            var model = _reportRepository.GetAllTasks();
             return View(model);
         }
 
@@ -117,6 +118,68 @@ namespace AltPro.BackTracker.Controllers
         {
             return View();
         }
+
+
+        [HttpGet]
+        public ViewResult TaskView(int id)
+        {
+            TaskModel taskModel = _reportRepository.GetTask(id);
+            TaskEditViewModel editTaskModel = new TaskEditViewModel
+            {
+                ModuleName = taskModel.ModuleName,
+                TaskPriority = taskModel.TaskPriority,
+                Description = taskModel.Description
+            };
+            return View(editTaskModel);
+        }
+
+
+        [HttpGet]
+        public ViewResult EditTask(int id)
+        {
+            TaskModel taskModel = _reportRepository.GetTask(id);
+            TaskEditViewModel editTaskModel = new TaskEditViewModel
+            {
+                ModuleName = taskModel.ModuleName,
+                TaskPriority = taskModel.TaskPriority,
+                Description = taskModel.Description
+            };
+            return View(editTaskModel);
+        }
+
+        [HttpPost]
+        public IActionResult AddTask(TaskEditViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                TaskModel task = _reportRepository.GetTask(model.Id);
+                task.TaskTitle = "Sample";
+                task.ModuleName = model.ModuleName;
+                task.TaskPriority = model.TaskPriority;
+                task.TaskState = ETaskState.Reported;
+                task.Description = model.Description;
+                task.ReporterID = "Tutaj id zalogowanego";
+
+                _reportRepository.Edit(task);
+                return RedirectToAction("AddTask");
+            }
+            return View(model);
+        }
+
+        public IActionResult DeleteTask(int id)
+        {
+            TaskModel taskModel = _reportRepository.GetTask(id);
+            TaskEditViewModel editTaskModel = new TaskEditViewModel
+            {
+                ModuleName = taskModel.ModuleName,
+                TaskPriority = taskModel.TaskPriority,
+                Description = taskModel.Description
+            };
+
+            _reportRepository.Delete(id);
+            return View(editTaskModel);
+        }
+
 
         [AllowAnonymous]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
