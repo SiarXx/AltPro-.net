@@ -119,6 +119,21 @@ namespace AltPro.BackTracker.Controllers
             return View();
         }
 
+
+        [HttpGet]
+        public ViewResult TaskView(int id)
+        {
+            TaskModel taskModel = _reportRepository.GetTask(id);
+            TaskEditViewModel editTaskModel = new TaskEditViewModel
+            {
+                ModuleName = taskModel.ModuleName,
+                TaskPriority = taskModel.TaskPriority,
+                Description = taskModel.Description
+            };
+            return View(editTaskModel);
+        }
+
+
         [HttpGet]
         public ViewResult EditTask(int id)
         {
@@ -150,6 +165,21 @@ namespace AltPro.BackTracker.Controllers
             }
             return View(model);
         }
+
+        public IActionResult DeleteTask(int id)
+        {
+            TaskModel taskModel = _reportRepository.GetTask(id);
+            TaskEditViewModel editTaskModel = new TaskEditViewModel
+            {
+                ModuleName = taskModel.ModuleName,
+                TaskPriority = taskModel.TaskPriority,
+                Description = taskModel.Description
+            };
+
+            _reportRepository.Delete(id);
+            return View(editTaskModel);
+        }
+
 
         [AllowAnonymous]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
