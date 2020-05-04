@@ -128,6 +128,7 @@ namespace AltPro.BackTracker.Controllers
 
             TaskEditViewModel editTaskModel = new TaskEditViewModel
             {
+                Title = taskModel.TaskTitle,
                 ModuleName = module,
                 TaskPriority = taskModel.TaskPriority,
                 Description = taskModel.Description
