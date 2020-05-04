@@ -124,9 +124,11 @@ namespace AltPro.BackTracker.Controllers
         public ViewResult TaskView(int id)
         {
             TaskModel taskModel = _reportRepository.GetTask(id);
+            Enum.TryParse(taskModel.ModuleName, out EModule module);
+
             TaskEditViewModel editTaskModel = new TaskEditViewModel
             {
-                ModuleName = taskModel.ModuleName,
+                ModuleName = module,
                 TaskPriority = taskModel.TaskPriority,
                 Description = taskModel.Description
             };
@@ -138,9 +140,10 @@ namespace AltPro.BackTracker.Controllers
         public ViewResult EditTask(int id)
         {
             TaskModel taskModel = _reportRepository.GetTask(id);
+            Enum.TryParse(taskModel.ModuleName, out EModule module);
             TaskEditViewModel editTaskModel = new TaskEditViewModel
             {
-                ModuleName = taskModel.ModuleName,
+                ModuleName = module,
                 TaskPriority = taskModel.TaskPriority,
                 Description = taskModel.Description
             };
@@ -148,17 +151,16 @@ namespace AltPro.BackTracker.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddTask(TaskEditViewModel model)
+        public IActionResult EditTask(TaskEditViewModel model)
         {
             if (ModelState.IsValid)
             {
                 TaskModel task = _reportRepository.GetTask(model.Id);
-                task.TaskTitle = "Sample";
-                task.ModuleName = model.ModuleName;
+                task.TaskTitle = model.Title;
+                task.ModuleName = Enum.GetName(typeof(EModule), model.ModuleName);
                 task.TaskPriority = model.TaskPriority;
                 task.TaskState = ETaskState.Reported;
                 task.Description = model.Description;
-                task.ReporterID = "Tutaj id zalogowanego";
 
                 _reportRepository.Edit(task);
                 return RedirectToAction("AddTask");
@@ -169,9 +171,10 @@ namespace AltPro.BackTracker.Controllers
         public IActionResult DeleteTask(int id)
         {
             TaskModel taskModel = _reportRepository.GetTask(id);
+            Enum.TryParse(taskModel.ModuleName, out EModule module);
             TaskEditViewModel editTaskModel = new TaskEditViewModel
             {
-                ModuleName = taskModel.ModuleName,
+                ModuleName = module,
                 TaskPriority = taskModel.TaskPriority,
                 Description = taskModel.Description
             };
