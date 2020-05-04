@@ -143,6 +143,7 @@ namespace AltPro.BackTracker.Controllers
             Enum.TryParse(taskModel.ModuleName, out EModule module);
             TaskEditViewModel editTaskModel = new TaskEditViewModel
             {
+                Title = taskModel.TaskTitle,
                 ModuleName = module,
                 TaskPriority = taskModel.TaskPriority,
                 Description = taskModel.Description
