@@ -4,6 +4,7 @@ using System.Linq;
 using AltPro.BackTracker.Models;
 using AltPro.BackTracker.Models.Enums;
 using AltPro.BackTracker.ViewModels;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 
@@ -30,17 +31,18 @@ namespace AltPro.BackTracker.Controllers
         [HttpPost]
         public IActionResult AddTask(TaskViewModel model)
         {
+            
             if (ModelState.IsValid)
             {
                 TaskModel task = new TaskModel()
                 {
-                    TaskTitle = "Sample",
-                    ModuleName = model.ModuleName,
+                    TaskTitle = model.Title,
+                    ModuleName = Enum.GetName(typeof(EModule),model.ModuleName),
                     TaskPriority = model.TaskPriority,
                     TaskState = ETaskState.Reported,
                     Description = model.Description,
-                    ReporterID = "Tutaj id zalogowanego"
-                };
+                    ReporterID = User.Identity.GetUserId()
+            };
                 taskRepository.Add(task);
                 return RedirectToAction("AddTask");
             }

@@ -5,16 +5,20 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Add task</h1>
+<h1>Create New Task</h1>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="AddTask" asp-controller="Task" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="ModuleName" class="control-label"></label>
-                <input asp-for="ModuleName" class="form-control" />
-                <span asp-validation-for="ModuleName" class="text-danger"></span>
+                <select asp-for="ModuleName" class="custom-select" asp-items="Html.GetEnumSelectList<EModule>()"></select>
             </div>
             <div class="form-group">
                 <label asp-for="TaskPriority" class="control-label"></label>
@@ -23,6 +27,7 @@
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
                 <textarea asp-for="Description" class="form-control"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

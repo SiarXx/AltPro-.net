@@ -1,17 +1,17 @@
-﻿using AltPro.BackTracker.Controllers;
-using AltPro.BackTracker.Models;
-using System;
-using System.Collections.Generic;
+﻿using AltPro.BackTracker.Models;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace AltPro.BackTracker.ViewModels
 {
     public class TaskViewModel
     {
+        [Required]
+        [Display(Name = "Title")]
+        public string Title { get; set; }
+        
+        [Required]
         [Display(Name = "Module")]
-        public string ModuleName { get; set; }
+        public EModule? ModuleName { get; set; }
 
         [Required]
         [Display(Name ="Priority")]
