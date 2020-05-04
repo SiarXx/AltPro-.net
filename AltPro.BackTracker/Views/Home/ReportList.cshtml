@@ -1,4 +1,4 @@
-﻿@model IEnumerable<AltPro.BackTracker.Models.Report>
+﻿@model IEnumerable<AltPro.BackTracker.Models.TaskModel>
 
 @{
     ViewBag.Title = "Report list";
@@ -9,26 +9,29 @@
 <div>
     @foreach (var report in Model)
     {
-    <div class="card m-1">
+    <p></p>
+    <div class="p-3 mb-2 bg-dark text-white rounded">
         <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
             <div class="d-flex w-100 justify-content-between">
-                <h5 class="mb-1">@report.Title</h5>
-                <small class="text-muted">@report.Time</small>
+                <h5 class="mb-1">@report.TaskTitle</h5>
+                <small class="text-muted">Module: @report.ModuleName</small>
             </div>
             <div>
-                <small class="text-muted"><strong>Priority: @report.Priority</strong>,</small>
-                <small class="text-muted"><strong>Status: @report.Status</strong></small>
+                <small class="text-muted"><strong>Priority: @report.TaskPriority</strong>,</small>
+                <small class="text-muted"><strong>Status: @report.TaskState</strong></small>
+                <small class="text-muted"><strong>Assigness: @report.AssignedID</strong></small>
             </div>
-
-            <small class="text-muted">Assigness: @report.Assigness</small>
-            <p>
-                <div>
-                    <small herf="#" class="btn btn-primary m-1">View</small>
-                    <small herf="#" class="btn btn-primary m-1">Edit</small>
-                    <small herf="#" class="btn btn-danger m-1">Delete</small>
-                </div>
-            </p>
+            <a asp-action="TaskView" asp-controller="Home"
+               asp-route-id="@report.TaskModelId"
+               class="btn btn-primary text-center">View</a>
+            <a asp-action="EditTask" asp-controller="Home"
+               asp-route-id="@report.TaskModelId"
+               class="btn btn-primary m-1 text-center">Edit</a>
+            <a asp-action="DeleteTask" asp-controller="Home"
+               asp-route-id="@report.TaskModelId"
+               method="post"
+               class="btn btn-danger m-1 text-center">Delete</a>
         </a>
-    </div>
+        </div>
     }
 </div>
