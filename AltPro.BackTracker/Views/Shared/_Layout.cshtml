@@ -36,6 +36,7 @@
             <a class="navbar-brand" asp-action="Index" asp-controller="Home">
                 <img src="~/images/donut_render2.jpg" alt="Alternate Text" height="30" width="30" />
             </a>
+            <a class="navbar-brand" asp-action="AddTask" asp-controller="Task">New Task</a>
 
             <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#collapsibleNavbar">
                 <span class="navbar-toggler-icon"></span>
@@ -48,13 +49,7 @@
                         <a asp-action="Profile" asp-controller="Home" class="nav-link">Profile</a>
                     </li>
                     <li class="nav-item">
-                        <a asp-action="Projects" asp-controller="Home" class="nav-link">Projects</a>
-                    </li>
-                    <li class="nav-item">
                         <a asp-action="ReportList" asp-controller="home" class="nav-link">Report list</a>
-                    </li>
-                    <li class="nav-item">
-                        <a asp-action="CreateReport" asp-controller="home" class="nav-link">Create report</a>
                     </li>
                 </ul>
 

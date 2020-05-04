@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace AltPro.BackTracker.ViewModels
 {
-    public class HomeReportViewModel
+    public class TaskEditViewModel : TaskViewModel
     {
-        public Report Report { get; set; }
-        public string PageTitle { get; set; }
+        public int Id { get; set; }
     }
 }
