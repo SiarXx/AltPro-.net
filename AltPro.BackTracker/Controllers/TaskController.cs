@@ -34,8 +34,8 @@ namespace AltPro.BackTracker.Controllers
             {
                 TaskModel task = new TaskModel()
                 {
-                    TaskTitle = "Sample",
-                    ModuleName = model.ModuleName,
+                    TaskTitle = model.Title,
+                    ModuleName = Enum.GetName(typeof(EModule),model.ModuleName),
                     TaskPriority = model.TaskPriority,
                     TaskState = ETaskState.Reported,
                     Description = model.Description,

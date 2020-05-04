@@ -12,8 +12,13 @@
         <form asp-action="AddTask" asp-controller="Task" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="ModuleName" class="control-label"></label>
-                <input asp-for="ModuleName" class="form-control" />
+                <select asp-for="ModuleName" class="custom-select" asp-items="Html.GetEnumSelectList<EModule>()"></select>
                 <span asp-validation-for="ModuleName" class="text-danger"></span>
             </div>
             <div class="form-group">
