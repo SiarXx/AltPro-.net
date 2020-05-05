@@ -14,19 +14,20 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" readonly class="form-control" />
             </div>
             <div class="form-group">
                 <label asp-for="ModuleName" class="control-label"></label>
-                <select asp-for="ModuleName" class="custom-select" asp-items="Html.GetEnumSelectList<EModule>()"></select>
+                <select asp-for="ModuleName" disabled="disabled" class="custom-select" asp-items="Html.GetEnumSelectList<EModule>()"></select>
             </div>
             <div class="form-group">
                 <label asp-for="TaskPriority" class="control-label"></label>
-                <select asp-for="TaskPriority" class="custom-select" asp-items="Html.GetEnumSelectList<ETaskPriority>()"></select>
+                <select asp-for="TaskPriority" disabled="disabled" class="custom-select" asp-items="Html.GetEnumSelectList<ETaskPriority>()"></select>
             </div>
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
-                <textarea asp-for="Description" class="form-control"></textarea>
+                <textarea asp-for="Description" readonly class="form-control"></textarea>
             </div>
             <div class="form-group">
                 <a class="btn btn-primary" asp-controller="home" asp-action="ReportList"> Back</a>
