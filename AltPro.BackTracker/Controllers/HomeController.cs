@@ -86,9 +86,12 @@ namespace AltPro.BackTracker.Controllers
             {
                 var userId = User.Identity.GetUserId();
                 var user = await userManager.Users.FirstOrDefaultAsync(e => e.Id == userId);
-
-                user.Email = model.Email;
                 
+                if(model.Email != null)
+                {
+                    user.Email = model.Email;
+                }
+
                 if(model.Photo != null)
                 {
                     if(model.ExistingPhotoPath != null)
@@ -99,10 +102,6 @@ namespace AltPro.BackTracker.Controllers
                     }
                     user.PhotoPath = ProcessUploadFile(model);
                 }
-
-                var usser = context.Users.Attach(user);
-                usser.State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-                context.SaveChanges();
                 return RedirectToAction("Index");
             }
             return View();
@@ -193,7 +192,7 @@ namespace AltPro.BackTracker.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        private string ProcessUploadFile(RegisterViewModel model)
+        private string ProcessUploadFile(ProfileEditViewModel model)
         {
             string uniqueFileName = null;
             if (model.Photo != null)
