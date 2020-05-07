@@ -1,4 +1,6 @@
 ﻿using AltPro.BackTracker.Models;
+using Microsoft.AspNetCore.Http;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace AltPro.BackTracker.ViewModels
@@ -21,6 +23,9 @@ namespace AltPro.BackTracker.ViewModels
         [MaxLength(500,ErrorMessage = "Description too long (max 500 znakis)")]
         [Display(Name = "Description")]
         public string Description { get; set; }
+
+        [Display(Name ="Attachments")]
+        public List<IFormFile> Attachemnts  { get; set; }
     }
 
 }
