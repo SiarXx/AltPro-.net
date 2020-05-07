@@ -7,6 +7,8 @@
   <ItemGroup>
     <Compile Remove="Migrations\20200409091650_extend_user.cs" />
     <Compile Remove="Migrations\20200409091650_extend_user.Designer.cs" />
+    <Compile Remove="Migrations\20200507210037_AddAttachmentsTable.cs" />
+    <Compile Remove="Migrations\20200507210037_AddAttachmentsTable.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
