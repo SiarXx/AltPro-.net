@@ -12,13 +12,13 @@ namespace AltPro.BackTracker.Controllers
 {
     public class TaskController : Controller
     {
-        private readonly ITaskRepository taskRepository;
-        private readonly IWebHostEnvironment webHostEnvironment;
+        private readonly ITaskRepository TaskRepository;
+        private readonly IWebHostEnvironment HostEnvironment;
 
         public TaskController(ITaskRepository taskRepository,IWebHostEnvironment webHostEnvironment)
         {
-            this.taskRepository = taskRepository;
-            this.webHostEnvironment = webHostEnvironment;
+            this.TaskRepository = taskRepository;
+            this.HostEnvironment = webHostEnvironment;
         }
         TaskViewModel newTask = new TaskViewModel();
 
@@ -43,7 +43,7 @@ namespace AltPro.BackTracker.Controllers
                     Description = model.Description,
                     ReporterID = User.Identity.GetUserId()
             };
-                taskRepository.Add(task);
+                TaskRepository.Add(task);
                 return RedirectToAction("AddTask");
             }
             return View();

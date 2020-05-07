@@ -17,7 +17,9 @@ namespace AltPro.BackTracker.Models
         {
 
         }
+
         public DbSet<TaskModel> TaskModels { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
