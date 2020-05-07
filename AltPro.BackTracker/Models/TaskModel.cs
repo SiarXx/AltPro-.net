@@ -33,7 +33,5 @@ namespace AltPro.BackTracker.Models
         [Required]
         public ETaskState? TaskState { get; set; }
 
-        public List<string> AttachmentsPaths { get; set; }
-
     }
 }
