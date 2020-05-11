@@ -20,6 +20,13 @@ namespace AltPro.BackTracker.Models
             return taskModel;
         }
 
+        public Attachment Add(Attachment attachment)
+        {
+            Context.Attachments.Add(attachment);
+            Context.SaveChanges();
+            return attachment;
+        }
+
         public void Delete(int id)
         {
             TaskModel task = Context.TaskModels.Find(id);

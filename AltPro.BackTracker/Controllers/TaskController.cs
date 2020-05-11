@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using AltPro.BackTracker.Models;
 using AltPro.BackTracker.Models.Enums;
 using AltPro.BackTracker.ViewModels;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AltPro.BackTracker.Controllers
@@ -42,11 +44,44 @@ namespace AltPro.BackTracker.Controllers
                     TaskState = ETaskState.Reported,
                     Description = model.Description,
                     ReporterID = User.Identity.GetUserId()
-            };
+                };
                 TaskRepository.Add(task);
+
+                foreach (var file in model.Attachemnts)
+                {
+                    Attachment attachment = new Attachment()
+                    {
+                        Path = ProcessUploadFile(model),
+                        TaskId = task.TaskModelId
+                    };
+                    TaskRepository.Add(attachment);
+                }
+                
                 return RedirectToAction("AddTask");
             }
             return View();
+        }
+
+        private string ProcessUploadFile(TaskViewModel model)
+        {
+            string uniqueFileName = null;
+            if (model.Attachemnts != null && model.Attachemnts.Count > 0)
+            {
+                foreach(IFormFile attachment in model.Attachemnts) { 
+                    string uplodasFolder = Path.Combine(HostEnvironment.WebRootPath, "images");
+                    uniqueFileName = Guid.NewGuid().ToString() + "_" + attachment.FileName;
+                    string filePath = Path.Combine(uplodasFolder, uniqueFileName);
+
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        attachment.CopyTo(fileStream);
+                    }
+                }
+
+                
+            }
+
+            return uniqueFileName;
         }
     }
 
