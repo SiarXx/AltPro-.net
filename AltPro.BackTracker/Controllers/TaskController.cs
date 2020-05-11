@@ -47,41 +47,29 @@ namespace AltPro.BackTracker.Controllers
                 };
                 TaskRepository.Add(task);
 
-                foreach (var file in model.Attachemnts)
+                string uniqueFileName = null;
+
+                if (model.Attachemnts != null && model.Attachemnts.Count > 0)
                 {
-                    Attachment attachment = new Attachment()
+                    foreach (IFormFile file in model.Attachemnts)
                     {
-                        Path = ProcessUploadFile(model),
-                        TaskId = task.TaskModelId
-                    };
-                    TaskRepository.Add(attachment);
-                }
-                
-                return RedirectToAction("AddTask");
-            }
-            return View();
-        }
+                        string uplodasFolder = Path.Combine(HostEnvironment.WebRootPath, "attachments");
+                        uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
+                        string filePath = Path.Combine(uplodasFolder, uniqueFileName);
+                        file.CopyTo(new FileStream(filePath, FileMode.Create));
 
-        private string ProcessUploadFile(TaskViewModel model)
-        {
-            string uniqueFileName = null;
-            if (model.Attachemnts != null && model.Attachemnts.Count > 0)
-            {
-                foreach(IFormFile attachment in model.Attachemnts) { 
-                    string uplodasFolder = Path.Combine(HostEnvironment.WebRootPath, "images");
-                    uniqueFileName = Guid.NewGuid().ToString() + "_" + attachment.FileName;
-                    string filePath = Path.Combine(uplodasFolder, uniqueFileName);
-
-                    using (var fileStream = new FileStream(filePath, FileMode.Create))
-                    {
-                        attachment.CopyTo(fileStream);
+                        Attachment attachment = new Attachment()
+                        {
+                            Path = uniqueFileName,
+                            TaskId = task.TaskModelId
+                        };
+                        TaskRepository.Add(attachment);
                     }
                 }
 
-                
+                    return RedirectToAction("AddTask");
             }
-
-            return uniqueFileName;
+            return View();
         }
     }
 
