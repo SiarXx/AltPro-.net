@@ -17,23 +17,23 @@ namespace AltPro.BackTracker.Controllers
     [Authorize]
     public class AccountController : Controller
     {
-        private readonly UserManager<ApplicationUser> userManager;
-        private readonly IWebHostEnvironment webHostEnvironment;
-        private readonly SignInManager<ApplicationUser> signInManager;
+        private readonly UserManager<ApplicationUser> UserManage;
+        private readonly IWebHostEnvironment HostEnvironment;
+        private readonly SignInManager<ApplicationUser> SignManager;
 
         public AccountController(UserManager<ApplicationUser> userManager, 
             IWebHostEnvironment webHostEnvironment, 
             SignInManager<ApplicationUser> signInManager)
         {
-            this.userManager = userManager;
-            this.signInManager = signInManager;
-            this.webHostEnvironment = webHostEnvironment;
+            this.UserManage = userManager;
+            this.SignManager = signInManager;
+            this.HostEnvironment = webHostEnvironment;
         }
 
         [HttpPost]
         public async Task<IActionResult> Logout()
         {
-            await signInManager.SignOutAsync();
+            await SignManager.SignOutAsync();
             return RedirectToAction("index", "home");
         }
 
@@ -58,11 +58,11 @@ namespace AltPro.BackTracker.Controllers
                     Email = model.Email,
                     PhotoPath = uniqueFileName
                 };
-                var result = await userManager.CreateAsync(user, model.Password);
+                var result = await UserManage.CreateAsync(user, model.Password);
 
                 if (result.Succeeded)
                 {
-                    await signInManager.SignInAsync(user, isPersistent: false);
+                    await SignManager.SignInAsync(user, isPersistent: false);
                     return RedirectToAction("login", "account");
                 }
 
@@ -88,7 +88,7 @@ namespace AltPro.BackTracker.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = await signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
+                var result = await SignManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
 
                 if (result.Succeeded)
                 {
@@ -112,7 +112,7 @@ namespace AltPro.BackTracker.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> IsEmailinUse(string email)
         {
-            var user = await userManager.FindByEmailAsync(email);
+            var user = await UserManage.FindByEmailAsync(email);
 
             if (user == null)
             {
@@ -129,7 +129,7 @@ namespace AltPro.BackTracker.Controllers
             string uniqueFileName = null;
             if (model.Photo != null)
             {
-                string uplodasFolder = Path.Combine(webHostEnvironment.WebRootPath, "images");
+                string uplodasFolder = Path.Combine(HostEnvironment.WebRootPath, "images");
                 uniqueFileName = Guid.NewGuid().ToString() + "_" + model.Photo.FileName;
                 string filePath = Path.Combine(uplodasFolder, uniqueFileName);
 

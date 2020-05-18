@@ -7,26 +7,33 @@ namespace AltPro.BackTracker.Models
 {
     public class SQLTaskRepository : ITaskRepository
     {
-        private readonly AppDBContext context;
+        private readonly AppDBContext Context;
 
         public SQLTaskRepository(AppDBContext context)
         {
-            this.context = context;
+            this.Context = context;
         }
         public TaskModel Add(TaskModel taskModel)
         {
-            context.TaskModels.Add(taskModel);
-            context.SaveChanges();
+            Context.TaskModels.Add(taskModel);
+            Context.SaveChanges();
             return taskModel;
+        }
+
+        public Attachment Add(Attachment attachment)
+        {
+            Context.Attachments.Add(attachment);
+            Context.SaveChanges();
+            return attachment;
         }
 
         public void Delete(int id)
         {
-            TaskModel task = context.TaskModels.Find(id);
+            TaskModel task = Context.TaskModels.Find(id);
             if (task != null)
             {
-                context.TaskModels.Remove(task);
-                context.SaveChanges();
+                Context.TaskModels.Remove(task);
+                Context.SaveChanges();
             }
         }
 
@@ -37,12 +44,12 @@ namespace AltPro.BackTracker.Models
 
         public IEnumerable<TaskModel> GetAllTasks()
         {
-            return context.TaskModels;
+            return Context.TaskModels;
         }
 
         public TaskModel GetTask(int id)
         {
-            TaskModel task = context.TaskModels.Find(id);
+            TaskModel task = Context.TaskModels.Find(id);
             return task;
         }
     }
