@@ -37,6 +37,18 @@ namespace AltPro.BackTracker.Models
             }
         }
 
+        public CommentModel Add(CommentModel comment)
+        {
+            Context.CommentModels.Add(comment);
+            Context.SaveChanges();
+            return comment;
+        }
+        public IEnumerable<CommentModel> GetAllComments(int taskId)
+        {
+            var comments = Context.CommentModels.Where(x => x.TaskId == taskId);
+            return comments;
+        }
+
         public TaskModel Edit(TaskModel taskModel)
         {
             throw new NotImplementedException();

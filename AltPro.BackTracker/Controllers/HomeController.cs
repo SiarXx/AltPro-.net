@@ -206,5 +206,12 @@ namespace AltPro.BackTracker.Controllers
 
             return uniqueFileName;
         }
+
+        public ActionResult LoadComments(int id)
+        {
+            var comments = reportRepository.GetAllComments(id);
+            //TODO wymyslec w jaki sposob zaladowac komentarze do widoku
+            return null;
+        }
     }
 }
