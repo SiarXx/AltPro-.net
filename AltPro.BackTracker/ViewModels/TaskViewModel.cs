@@ -26,6 +26,9 @@ namespace AltPro.BackTracker.ViewModels
 
         [Display(Name ="Attachments")]
         public List<IFormFile> Attachemnts  { get; set; }
+
+        [Display(Name ="Comments")]
+        public List<CommentModel> Comments { get; set; }
     }
 
 }

@@ -37,7 +37,7 @@ namespace AltPro.BackTracker.Models
             }
         }
 
-        public CommentModel Add(CommentModel comment)
+        public CommentModel AddComment(CommentModel comment)
         {
             Context.CommentModels.Add(comment);
             Context.SaveChanges();

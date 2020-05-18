@@ -127,7 +127,8 @@ namespace AltPro.BackTracker.Controllers
                 Title = taskModel.TaskTitle,
                 ModuleName = module,
                 TaskPriority = taskModel.TaskPriority,
-                Description = taskModel.Description
+                Description = taskModel.Description,
+                Comments = LoadComments(id)
             };
             return View(editTaskModel);
         }
@@ -207,11 +208,20 @@ namespace AltPro.BackTracker.Controllers
             return uniqueFileName;
         }
 
-        public ActionResult LoadComments(int id)
+        public List<CommentModel> LoadComments(int id)
         {
-            var comments = reportRepository.GetAllComments(id);
-            //TODO wymyslec w jaki sposob zaladowac komentarze do widoku
-            return null;
+            var comments = reportRepository.GetAllComments(id).ToList();
+            return comments;
+        }
+        
+        [HttpPost]
+        public IActionResult AddComment(CommentModel comment)
+        {
+            if (ModelState.IsValid)
+            {
+                reportRepository.AddComment(comment);
+            }
+            return View();
         }
     }
 }

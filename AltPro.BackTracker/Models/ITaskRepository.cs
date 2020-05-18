@@ -21,6 +21,6 @@ namespace AltPro.BackTracker.Models
 
         public IEnumerable<CommentModel> GetAllComments(int taskId);
 
-        public CommentModel Add(CommentModel comment);
+        public CommentModel AddComment(CommentModel comment);
     }
 }
