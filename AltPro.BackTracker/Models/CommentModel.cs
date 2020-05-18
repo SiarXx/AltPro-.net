@@ -14,7 +14,6 @@ namespace AltPro.BackTracker.Models
         [Required]
         [ForeignKey("TaskModel")]
         public int TaskId{ get; set; }
-
         public TaskModel TaskModel { get; set; }
 
         [Required]
