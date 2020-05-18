@@ -23,6 +23,6 @@ namespace AltPro.BackTracker.Models
 
         public DateTime TimePosted { get; set; }
 
-        public int PosterId { get; set; }
+        public string PosterName { get; set; }
     }
 }

@@ -124,6 +124,7 @@ namespace AltPro.BackTracker.Controllers
 
             TaskEditViewModel editTaskModel = new TaskEditViewModel
             {
+                Id = id,
                 Title = taskModel.TaskTitle,
                 ModuleName = module,
                 TaskPriority = taskModel.TaskPriority,
@@ -131,6 +132,20 @@ namespace AltPro.BackTracker.Controllers
                 Comments = LoadComments(id)
             };
             return View(editTaskModel);
+        }
+
+        [HttpPost]
+        public IActionResult TaskView(TaskEditViewModel model)
+        {
+                CommentModel comment = new CommentModel()
+                {
+                    CommentBody = model.NewCommentBody,
+                    PosterName = User.Identity.Name,
+                    TimePosted = DateTime.Now,
+                    TaskId = model.Id
+                };
+                reportRepository.AddComment(comment);
+            return TaskView(model.Id);
         }
 
 
@@ -214,14 +229,6 @@ namespace AltPro.BackTracker.Controllers
             return comments;
         }
         
-        [HttpPost]
-        public IActionResult AddComment(CommentModel comment)
-        {
-            if (ModelState.IsValid)
-            {
-                reportRepository.AddComment(comment);
-            }
-            return View();
-        }
+
     }
 }

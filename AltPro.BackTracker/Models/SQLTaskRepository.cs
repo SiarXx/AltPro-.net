@@ -45,7 +45,7 @@ namespace AltPro.BackTracker.Models
         }
         public IEnumerable<CommentModel> GetAllComments(int taskId)
         {
-            var comments = Context.CommentModels.Where(x => x.TaskId == taskId);
+            var comments = Context.CommentModels.Where(x => x.TaskId == taskId).OrderBy(x => x.TimePosted);
             return comments;
         }
 
