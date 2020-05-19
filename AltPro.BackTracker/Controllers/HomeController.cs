@@ -135,7 +135,7 @@ namespace AltPro.BackTracker.Controllers
                 AssignedID = taskModel.AssignedID,
                 ModuleName = module,
                 TaskPriority = taskModel.TaskPriority,
-                Description = taskModel.Description
+                Description = taskModel.Description,
                 Comments = LoadComments(id)
 
             };
