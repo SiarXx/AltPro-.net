@@ -102,11 +102,18 @@ namespace AltPro.BackTracker.Controllers
                 return RedirectToAction("Index");
             }
             return View();
-        }       
+        }
+        
 
-        public IActionResult ReportList()
+        public ViewResult ReportList(string searchString)
         {
-            var model = reportRepository.GetAllTasks();
+            var tasks = _reportRepository.GetAllTasks();
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                tasks = tasks.Where(s => s.AssignedID.ToUpper().Contains(searchString.ToUpper()));
+            }
+            var model = tasks.ToList();
             return View(model);
         }
 
@@ -114,7 +121,6 @@ namespace AltPro.BackTracker.Controllers
         {
             return View();
         }
-
 
         [HttpGet]
         public ViewResult TaskView(int id)
@@ -125,13 +131,13 @@ namespace AltPro.BackTracker.Controllers
             TaskEditViewModel editTaskModel = new TaskEditViewModel
             {
                 Title = taskModel.TaskTitle,
+                AssignedID = taskModel.AssignedID,
                 ModuleName = module,
                 TaskPriority = taskModel.TaskPriority,
                 Description = taskModel.Description
             };
             return View(editTaskModel);
         }
-
 
         [HttpGet]
         public ViewResult EditTask(int id)
@@ -141,6 +147,7 @@ namespace AltPro.BackTracker.Controllers
             TaskEditViewModel editTaskModel = new TaskEditViewModel
             {
                 Title = taskModel.TaskTitle,
+                AssignedID = taskModel.AssignedID,
                 ModuleName = module,
                 TaskPriority = taskModel.TaskPriority,
                 Description = taskModel.Description
@@ -155,6 +162,7 @@ namespace AltPro.BackTracker.Controllers
             {
                 TaskModel task = reportRepository.GetTask(model.Id);
                 task.TaskTitle = model.Title;
+                task.AssignedID = model.AssignedID;
                 task.ModuleName = Enum.GetName(typeof(EModule), model.ModuleName);
                 task.TaskPriority = model.TaskPriority;
                 task.TaskState = ETaskState.Reported;
