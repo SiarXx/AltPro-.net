@@ -18,5 +18,9 @@ namespace AltPro.BackTracker.Models
         TaskModel Edit(TaskModel taskModel);
 
         void Delete(int id);
+
+        public IEnumerable<CommentModel> GetAllComments(int taskId);
+
+        public CommentModel AddComment(CommentModel comment);
     }
 }
