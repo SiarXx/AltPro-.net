@@ -107,7 +107,7 @@ namespace AltPro.BackTracker.Controllers
 
         public ViewResult ReportList(string searchString)
         {
-            var tasks = _reportRepository.GetAllTasks();
+            var tasks = reportRepository.GetAllTasks();
 
             if (!String.IsNullOrEmpty(searchString))
             {
