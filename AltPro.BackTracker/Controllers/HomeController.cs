@@ -111,12 +111,19 @@ namespace AltPro.BackTracker.Controllers
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                tasks = tasks.Where(s => s.AssignedID.ToUpper().Contains(searchString.ToUpper()));
+                tasks = reportRepository.GetAllTasks().Where(s => s.TaskTitle.ToUpper().Contains(searchString.ToUpper()));
             }
             var model = tasks.ToList();
             return View(model);
         }
 
+        public IActionResult UserReportList()
+        {
+            var tasks = new List<TaskModel>();
+            var querry = reportRepository.GetAllTasks().Where(s => s.ReporterID.Equals(User.Identity.GetUserId())|| s.AssignedID.Equals(User.Identity.GetUserId()));
+            tasks = querry.ToList();
+            return View(tasks);
+        }
         public IActionResult Index()
         {
             return View();

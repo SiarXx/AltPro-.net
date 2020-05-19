@@ -11,7 +11,6 @@ namespace AltPro.BackTracker.ViewModels
         [Display(Name = "Title")]
         public string Title { get; set; }
 
-        [Required]
         [Display(Name = "AssignedID")]
         public string AssignedID { get; set; }
 

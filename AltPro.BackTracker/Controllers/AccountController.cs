@@ -63,7 +63,7 @@ namespace AltPro.BackTracker.Controllers
                 if (result.Succeeded)
                 {
                     await SignManager.SignInAsync(user, isPersistent: false);
-                    return RedirectToAction("login", "account");
+                    return RedirectToAction("index", "home");
                 }
 
                 foreach (var error in result.Errors)
