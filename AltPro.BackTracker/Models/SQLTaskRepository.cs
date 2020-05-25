@@ -49,9 +49,12 @@ namespace AltPro.BackTracker.Models
             return comments;
         }
 
-        public TaskModel Edit(TaskModel taskModel)
+        public TaskModel Edit(TaskModel taskModelChanges)
         {
-            throw new NotImplementedException();
+            var taskModel = Context.TaskModels.Update(taskModelChanges);
+            taskModel.State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            Context.SaveChanges();
+            return taskModelChanges;
         }
 
         public IEnumerable<TaskModel> GetAllTasks()

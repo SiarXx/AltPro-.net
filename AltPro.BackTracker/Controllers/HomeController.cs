@@ -187,15 +187,15 @@ namespace AltPro.BackTracker.Controllers
                 TaskModel task = reportRepository.GetTask(model.Id);
                 task.TaskTitle = model.Title;
                 task.AssignedID = model.AssignedID;
-                task.ModuleName = Enum.GetName(typeof(EModule), model.ModuleName);
+                task.ModuleName = model.ModuleName.ToString();
                 task.TaskPriority = model.TaskPriority;
                 task.TaskState = ETaskState.Reported;
                 task.Description = model.Description;
 
                 reportRepository.Edit(task);
-                return RedirectToAction("AddTask");
+                return RedirectToAction("ReportList");
             }
-            return View(model);
+            return View();
         }
 
         public IActionResult DeleteTask(int id)
