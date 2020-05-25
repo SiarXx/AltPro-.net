@@ -13,6 +13,8 @@ namespace AltPro.BackTracker.Models
 
         TaskModel Add(TaskModel taskModel);
 
+        Attachment Add(Attachment attachment);
+
         TaskModel Edit(TaskModel taskModel);
 
         void Delete(int id);

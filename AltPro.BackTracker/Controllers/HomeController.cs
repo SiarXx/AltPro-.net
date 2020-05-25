@@ -25,29 +25,26 @@ namespace AltPro.BackTracker.Controllers
     public class HomeController : Controller
 
     {
-        private ITaskRepository _reportRepository;
-        private readonly ILogger<HomeController> logger;
-        private readonly IWebHostEnvironment webHostEnvironment;
-        private readonly Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> userManager;
-        private readonly AppDBContext context;
+        private ITaskRepository reportRepository;
+        private readonly IWebHostEnvironment HostEnvironment;
+        private readonly Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> userManage;
+        private readonly AppDBContext Context;
 
-        public HomeController(ILogger<HomeController> logger,
-            IWebHostEnvironment webHostEnvironment,
+        public HomeController(IWebHostEnvironment webHostEnvironment,
             Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> userManager,
             AppDBContext context,
             ITaskRepository reportRepository)
         {
-            this.logger = logger;
-            this.userManager = userManager;
-            this.webHostEnvironment = webHostEnvironment;
-            _reportRepository = reportRepository;
+            this.userManage = userManager;
+            this.HostEnvironment = webHostEnvironment;
+            this.reportRepository = reportRepository;
         }
 
         [HttpGet]
         public async Task<IActionResult> Profile()
         {
             var userId = User.Identity.GetUserId();
-            var user = await userManager.Users.FirstOrDefaultAsync(e => e.Id == userId);
+            var user = await userManage.Users.FirstOrDefaultAsync(e => e.Id == userId);
 
             if(user == null)
             {
@@ -68,7 +65,7 @@ namespace AltPro.BackTracker.Controllers
         public async Task<ViewResult> Edit()
         {
             var userId = User.Identity.GetUserId();
-            var user = await userManager.Users.FirstOrDefaultAsync(e => e.Id == userId);
+            var user = await userManage.Users.FirstOrDefaultAsync(e => e.Id == userId);
 
             ProfileEditViewModel profileEditViewModel = new ProfileEditViewModel()
             {
@@ -85,7 +82,7 @@ namespace AltPro.BackTracker.Controllers
             if (ModelState.IsValid)
             {
                 var userId = User.Identity.GetUserId();
-                var user = await userManager.Users.FirstOrDefaultAsync(e => e.Id == userId);
+                var user = await userManage.Users.FirstOrDefaultAsync(e => e.Id == userId);
                 
                 if(model.Email != null)
                 {
@@ -96,7 +93,7 @@ namespace AltPro.BackTracker.Controllers
                 {
                     if(model.ExistingPhotoPath != null)
                     {
-                        string filePath = Path.Combine(webHostEnvironment.WebRootPath,
+                        string filePath = Path.Combine(HostEnvironment.WebRootPath,
                             "images", model.ExistingPhotoPath);
                         System.IO.File.Delete(filePath);
                     }
@@ -105,11 +102,18 @@ namespace AltPro.BackTracker.Controllers
                 return RedirectToAction("Index");
             }
             return View();
-        }       
+        }
 
-        public IActionResult ReportList()
+        public ViewResult ReportList(string searchString)
         {
-            var model = _reportRepository.GetAllTasks();
+            var tasks = reportRepository.GetAllTasks();
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                tasks = tasks.Where(s => s.AssignedID.ToUpper().Contains(searchString.ToUpper()));
+            }
+            var model = tasks.ToList();
+
             return View(model);
         }
 
@@ -118,16 +122,16 @@ namespace AltPro.BackTracker.Controllers
             return View();
         }
 
-
         [HttpGet]
         public ViewResult TaskView(int id)
         {
-            TaskModel taskModel = _reportRepository.GetTask(id);
+            TaskModel taskModel = reportRepository.GetTask(id);
             Enum.TryParse(taskModel.ModuleName, out EModule module);
 
-            TaskEditViewModel editTaskModel = new TaskEditViewModel
+            TaskViewModel editTaskModel = new TaskViewModel
             {
                 Title = taskModel.TaskTitle,
+                AssignedID = taskModel.AssignedID,
                 ModuleName = module,
                 TaskPriority = taskModel.TaskPriority,
                 Description = taskModel.Description
@@ -135,15 +139,15 @@ namespace AltPro.BackTracker.Controllers
             return View(editTaskModel);
         }
 
-
         [HttpGet]
         public ViewResult EditTask(int id)
         {
-            TaskModel taskModel = _reportRepository.GetTask(id);
+            TaskModel taskModel = reportRepository.GetTask(id);
             Enum.TryParse(taskModel.ModuleName, out EModule module);
-            TaskEditViewModel editTaskModel = new TaskEditViewModel
+            TaskViewModel editTaskModel = new TaskViewModel
             {
                 Title = taskModel.TaskTitle,
+                AssignedID = taskModel.AssignedID,
                 ModuleName = module,
                 TaskPriority = taskModel.TaskPriority,
                 Description = taskModel.Description
@@ -152,35 +156,36 @@ namespace AltPro.BackTracker.Controllers
         }
 
         [HttpPost]
-        public IActionResult EditTask(TaskEditViewModel model)
+        public IActionResult EditTask(TaskViewModel model)
         {
             if (ModelState.IsValid)
             {
-                TaskModel task = _reportRepository.GetTask(model.Id);
+                TaskModel task = reportRepository.GetTask(model.Id);
                 task.TaskTitle = model.Title;
-                task.ModuleName = Enum.GetName(typeof(EModule), model.ModuleName);
+                task.AssignedID = model.AssignedID;
+                task.ModuleName = model.ModuleName.ToString();
                 task.TaskPriority = model.TaskPriority;
                 task.TaskState = ETaskState.Reported;
                 task.Description = model.Description;
 
-                _reportRepository.Edit(task);
-                return RedirectToAction("AddTask");
+                reportRepository.Edit(task);
+                return RedirectToAction("ReportList");
             }
-            return View(model);
+            return View();
         }
 
         public IActionResult DeleteTask(int id)
         {
-            TaskModel taskModel = _reportRepository.GetTask(id);
+            TaskModel taskModel = reportRepository.GetTask(id);
             Enum.TryParse(taskModel.ModuleName, out EModule module);
-            TaskEditViewModel editTaskModel = new TaskEditViewModel
+            TaskViewModel editTaskModel = new TaskViewModel
             {
                 ModuleName = module,
                 TaskPriority = taskModel.TaskPriority,
                 Description = taskModel.Description
             };
 
-            _reportRepository.Delete(id);
+            reportRepository.Delete(id);
             return View(editTaskModel);
         }
 
@@ -197,7 +202,7 @@ namespace AltPro.BackTracker.Controllers
             string uniqueFileName = null;
             if (model.Photo != null)
             {
-                string uplodasFolder = Path.Combine(webHostEnvironment.WebRootPath, "images");
+                string uplodasFolder = Path.Combine(HostEnvironment.WebRootPath, "images");
                 uniqueFileName = Guid.NewGuid().ToString() + "_" + model.Photo.FileName;
                 string filePath = Path.Combine(uplodasFolder, uniqueFileName);
 
