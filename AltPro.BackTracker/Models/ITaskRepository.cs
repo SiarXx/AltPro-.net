@@ -25,6 +25,8 @@ namespace AltPro.BackTracker.Models
 
         public IEnumerable<string> GetAllAttachmentsNames(int Id);
 
+        public Dictionary<string, string> GetAttachmentsStrings(int Id);
+
         public CommentModel AddComment(CommentModel comment);
     }
 }

@@ -75,13 +75,15 @@
 
 <div class="row">
     <div class="col-md-12">
-        @foreach (var attachment in Model.AttachmentPaths)
+        @foreach (var attachment in Model.AttachmentStrings)
         {
             <div class="card m-3" style="min-width:18rem; max-width:30.5%">
                 <div class="card-header">
-                    <h3>@attachment</h3>
+                    <h3>@attachment.Key</h3>
                 </div>
-
+                <div class="card-body">
+                    <h4>@attachment.Value</h4>
+                </div>
                 <div class="card-footer text-center">
                     
                 </div>

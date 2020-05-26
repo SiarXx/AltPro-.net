@@ -17,5 +17,7 @@ namespace AltPro.BackTracker.ViewModels
         public IEnumerable<string> AttachmentPaths { get; set; }
 
         public IEnumerable<string> AttachmentNames { get; set; }
+
+        public Dictionary<string, string> AttachmentStrings { get; set; }
     }
 }

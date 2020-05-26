@@ -79,5 +79,15 @@ namespace AltPro.BackTracker.Models
             var names = Context.Attachments.Where(e => e.TaskId.Equals(Id)).Select(e => $"{e.Name}");
             return names;
         }
+
+        public Dictionary<string, string> GetAttachmentsStrings(int Id)
+        {
+            var strings = Context.Attachments.Where(e => e.TaskId.Equals(Id)).Select(e => new {name = e.Name, path = e.Path });
+            Dictionary<string, string> dict = new Dictionary<string, string>();
+            foreach (var obj in strings){
+                dict.Add(obj.name, obj.path);
+            }
+            return dict;
+        }
     }
 }
