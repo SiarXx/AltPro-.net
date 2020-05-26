@@ -15,5 +15,7 @@ namespace AltPro.BackTracker.ViewModels
         public string NewCommentBody { get; set; }
 
         public IEnumerable<string> AttachmentPaths { get; set; }
+
+        public IEnumerable<string> AttachmentNames { get; set; }
     }
 }

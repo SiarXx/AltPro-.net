@@ -134,7 +134,8 @@ namespace AltPro.BackTracker.Controllers
         {
             TaskModel taskModel = reportRepository.GetTask(id);
             Enum.TryParse(taskModel.ModuleName, out EModule module);
-            var attachmentsPaths = reportRepository.GetAllAttachments(id);
+            var attachmentsPaths = reportRepository.GetAllAttachmentsPaths(id);
+            var attachmentsNames = reportRepository.GetAllAttachmentsNames(id);
 
             TaskEditViewModel editTaskModel = new TaskEditViewModel
             {
@@ -145,7 +146,8 @@ namespace AltPro.BackTracker.Controllers
                 TaskPriority = taskModel.TaskPriority,
                 Description = taskModel.Description,
                 Comments = LoadComments(id),
-                AttachmentPaths = attachmentsPaths
+                AttachmentPaths = attachmentsPaths,
+                AttachmentNames = attachmentsNames
             };
             return View(editTaskModel);
         }
