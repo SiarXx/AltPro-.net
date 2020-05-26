@@ -85,7 +85,9 @@
                     <h4>@attachment.Value</h4>
                 </div>
                 <div class="card-footer text-center">
-                    
+                    <a asp-action="DownloadFile" asp-controller="Home"
+                       asp-route-path="@attachment.Value"
+                       class="btn btn-primary text-center">Download</a>
                 </div>
             </div>
         }

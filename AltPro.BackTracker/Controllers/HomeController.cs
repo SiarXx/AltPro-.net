@@ -250,7 +250,16 @@ namespace AltPro.BackTracker.Controllers
             var comments = reportRepository.GetAllComments(id).ToList();
             return comments;
         }
-        
+
+        public ActionResult DownloadFile(string path)
+        {
+            //string path = AppDomain.CurrentDomain.BaseDirectory + "FolderName/";
+            string fileFolder = Path.Combine(HostEnvironment.WebRootPath, "attachments");
+            byte[] fileBytes = System.IO.File.ReadAllBytes(Path.Combine(fileFolder, path));
+            //string fileName = "filename.extension";
+            return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet);
+        }
+
 
     }
 }
