@@ -4,14 +4,16 @@ using AltPro.BackTracker.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AltPro.BackTracker.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    partial class AppDBContextModelSnapshot : ModelSnapshot
+    [Migration("20200518183348_CommentsMigration")]
+    partial class CommentsMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -52,8 +54,8 @@ namespace AltPro.BackTracker.Migrations
                         .HasColumnType("nvarchar(500)")
                         .HasMaxLength(500);
 
-                    b.Property<string>("PosterName")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("PosterId")
+                        .HasColumnType("int");
 
                     b.Property<int>("TaskId")
                         .HasColumnType("int");

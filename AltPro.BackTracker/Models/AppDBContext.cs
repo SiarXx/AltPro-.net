@@ -17,7 +17,13 @@ namespace AltPro.BackTracker.Models
         {
 
         }
+
         public DbSet<TaskModel> TaskModels { get; set; }
+
+        public DbSet<Attachment> Attachments { get; set; }
+
+        public DbSet<CommentModel> CommentModels { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

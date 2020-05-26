@@ -4,14 +4,16 @@ using AltPro.BackTracker.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AltPro.BackTracker.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    partial class AppDBContextModelSnapshot : ModelSnapshot
+    [Migration("20200507210417_AddAttachmentsTable")]
+    partial class AddAttachmentsTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -38,34 +40,6 @@ namespace AltPro.BackTracker.Migrations
                     b.HasIndex("TaskId");
 
                     b.ToTable("Attachments");
-                });
-
-            modelBuilder.Entity("AltPro.BackTracker.Models.CommentModel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("CommentBody")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(500)")
-                        .HasMaxLength(500);
-
-                    b.Property<string>("PosterName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("TaskId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("TimePosted")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TaskId");
-
-                    b.ToTable("CommentModels");
                 });
 
             modelBuilder.Entity("AltPro.BackTracker.Models.TaskModel", b =>
@@ -305,15 +279,6 @@ namespace AltPro.BackTracker.Migrations
                 });
 
             modelBuilder.Entity("AltPro.BackTracker.Models.Attachment", b =>
-                {
-                    b.HasOne("AltPro.BackTracker.Models.TaskModel", "TaskModel")
-                        .WithMany()
-                        .HasForeignKey("TaskId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("AltPro.BackTracker.Models.CommentModel", b =>
                 {
                     b.HasOne("AltPro.BackTracker.Models.TaskModel", "TaskModel")
                         .WithMany()
