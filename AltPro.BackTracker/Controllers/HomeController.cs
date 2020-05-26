@@ -152,7 +152,7 @@ namespace AltPro.BackTracker.Controllers
         [HttpPost]
         public IActionResult TaskView(TaskEditViewModel model)
         {
-            if(model.NewCommentBody!= null)
+            if (model.NewCommentBody != null)
             {
                 CommentModel comment = new CommentModel()
                 {
@@ -163,7 +163,7 @@ namespace AltPro.BackTracker.Controllers
                 };
                 reportRepository.AddComment(comment);
             }
-                
+
             return TaskView(model.Id);
         }
 
