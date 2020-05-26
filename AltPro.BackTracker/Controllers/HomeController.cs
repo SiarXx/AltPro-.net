@@ -152,6 +152,8 @@ namespace AltPro.BackTracker.Controllers
         [HttpPost]
         public IActionResult TaskView(TaskEditViewModel model)
         {
+            if(model.NewCommentBody!= null)
+            {
                 CommentModel comment = new CommentModel()
                 {
                     CommentBody = model.NewCommentBody,
@@ -160,6 +162,8 @@ namespace AltPro.BackTracker.Controllers
                     TaskId = model.Id
                 };
                 reportRepository.AddComment(comment);
+            }
+                
             return TaskView(model.Id);
         }
 
