@@ -12,7 +12,6 @@ namespace AltPro.BackTracker.ViewModels
         public int Id { get; set; }
 
         [MaxLength(500, ErrorMessage = "Description too long (max 500 znakis)")]
-        [Required]
         public string NewCommentBody { get; set; }
     }
 }
