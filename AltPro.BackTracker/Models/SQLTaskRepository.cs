@@ -62,6 +62,11 @@ namespace AltPro.BackTracker.Models
             return Context.TaskModels;
         }
 
+        public IEnumerable<TaskModel> GetAlLUserTasks(string Id)
+        {
+            return Context.TaskModels.Where(s => s.ReporterID.Equals(Id) || s.AssignedID.Equals(Id));
+        }
+
         public TaskModel GetTask(int id)
         {
             TaskModel task = Context.TaskModels.Find(id);

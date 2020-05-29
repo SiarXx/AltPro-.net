@@ -28,7 +28,6 @@ namespace AltPro.BackTracker.Controllers
         private ITaskRepository reportRepository;
         private readonly IWebHostEnvironment HostEnvironment;
         private readonly Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> userManage;
-        private readonly AppDBContext Context;
 
         public HomeController(IWebHostEnvironment webHostEnvironment,
             Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> userManager,
@@ -120,7 +119,7 @@ namespace AltPro.BackTracker.Controllers
         public IActionResult UserReportList()
         {
             var tasks = new List<TaskModel>();
-            var querry = reportRepository.GetAllTasks().Where(s => s.ReporterID.Equals(User.Identity.GetUserId())|| s.AssignedID.Equals(User.Identity.GetUserId()));
+            var querry = reportRepository.GetAlLUserTasks(User.Identity.GetUserId());
             tasks = querry.ToList();
             return View(tasks);
         }
