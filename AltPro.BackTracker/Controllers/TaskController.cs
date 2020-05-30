@@ -62,7 +62,8 @@ namespace AltPro.BackTracker.Controllers
                         Attachment attachment = new Attachment()
                         {
                             Path = uniqueFileName,
-                            TaskId = task.TaskModelId
+                            TaskId = task.TaskModelId,
+                            Name = file.FileName
                         };
                         TaskRepository.Add(attachment);
                     }

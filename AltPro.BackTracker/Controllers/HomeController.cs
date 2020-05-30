@@ -28,7 +28,6 @@ namespace AltPro.BackTracker.Controllers
         private ITaskRepository reportRepository;
         private readonly IWebHostEnvironment HostEnvironment;
         private readonly Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> userManage;
-        private readonly AppDBContext Context;
 
         public HomeController(IWebHostEnvironment webHostEnvironment,
             Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> userManager,
@@ -120,10 +119,11 @@ namespace AltPro.BackTracker.Controllers
         public IActionResult UserReportList()
         {
             var tasks = new List<TaskModel>();
-            var querry = reportRepository.GetAllTasks().Where(s => s.ReporterID.Equals(User.Identity.GetUserId())|| s.AssignedID.Equals(User.Identity.GetUserId()));
+            var querry = reportRepository.GetAlLUserTasks(User.Identity.GetUserId());
             tasks = querry.ToList();
             return View(tasks);
         }
+
         public IActionResult Index()
         {
             return View();
@@ -135,6 +135,8 @@ namespace AltPro.BackTracker.Controllers
             TaskModel taskModel = reportRepository.GetTask(id);
             Enum.TryParse(taskModel.ModuleName, out EModule module);
 
+            var attachmentStrings = reportRepository.GetAttachmentsStrings(id);
+
             TaskEditViewModel editTaskModel = new TaskEditViewModel
             {
                 Id = id,
@@ -143,8 +145,8 @@ namespace AltPro.BackTracker.Controllers
                 ModuleName = module,
                 TaskPriority = taskModel.TaskPriority,
                 Description = taskModel.Description,
-                Comments = LoadComments(id)
-
+                Comments = LoadComments(id),
+                AttachmentStrings = attachmentStrings
             };
             return View(editTaskModel);
         }
@@ -189,12 +191,33 @@ namespace AltPro.BackTracker.Controllers
             if (ModelState.IsValid)
             {
                 TaskModel task = reportRepository.GetTask(model.Id);
+                string uniqueFileName = null;
+
                 task.TaskTitle = model.Title;
                 task.AssignedID = model.AssignedID;
                 task.ModuleName = model.ModuleName.ToString();
                 task.TaskPriority = model.TaskPriority;
                 task.TaskState = ETaskState.Reported;
                 task.Description = model.Description;
+
+                if (model.Attachemnts != null && model.Attachemnts.Count > 0)
+                {
+                    foreach (IFormFile file in model.Attachemnts)
+                    {
+                        string uplodasFolder = Path.Combine(HostEnvironment.WebRootPath, "attachments");
+                        uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
+                        string filePath = Path.Combine(uplodasFolder, uniqueFileName);
+                        file.CopyTo(new FileStream(filePath, FileMode.Create));
+
+                        Attachment attachment = new Attachment()
+                        {
+                            Path = uniqueFileName,
+                            TaskId = task.TaskModelId,
+                            Name = file.FileName
+                        };
+                        reportRepository.Add(attachment);
+                    }
+                }
 
                 reportRepository.Edit(task);
                 return RedirectToAction("ReportList");
@@ -248,7 +271,32 @@ namespace AltPro.BackTracker.Controllers
             var comments = reportRepository.GetAllComments(id).ToList();
             return comments;
         }
-        
+
+        public ActionResult DownloadFile(string path)
+        {
+            //string path = AppDomain.CurrentDomain.BaseDirectory + "FolderName/";
+            string fileFolder = Path.Combine(HostEnvironment.WebRootPath, "attachments");
+            byte[] fileBytes = System.IO.File.ReadAllBytes(Path.Combine(fileFolder, path));
+            //string fileName = "filename.extension";
+            return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet);
+        }
+
+        [HttpGet]
+        public IActionResult AssignToMe(int id)
+        {
+            TaskModel taskToEdit = reportRepository.GetTask(id);
+            TaskModel task = reportRepository.GetTask(id);
+
+            task.TaskTitle = taskToEdit.TaskTitle;
+            task.AssignedID = User.Identity.GetUserId();
+            task.ModuleName = taskToEdit.ModuleName.ToString();
+            task.TaskPriority = taskToEdit.TaskPriority;
+            task.TaskState = ETaskState.Reported;
+            task.Description = taskToEdit.Description;
+            reportRepository.Edit(task);
+
+            return RedirectToAction("ReportList");
+        }
 
     }
 }

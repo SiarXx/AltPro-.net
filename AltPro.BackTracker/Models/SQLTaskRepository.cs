@@ -62,10 +62,37 @@ namespace AltPro.BackTracker.Models
             return Context.TaskModels;
         }
 
+        public IEnumerable<TaskModel> GetAlLUserTasks(string Id)
+        {
+            return Context.TaskModels.Where(s => s.ReporterID.Equals(Id) || s.AssignedID.Equals(Id));
+        }
+
         public TaskModel GetTask(int id)
         {
             TaskModel task = Context.TaskModels.Find(id);
             return task;
+        }
+
+        public IEnumerable<string> GetAllAttachmentsPaths(int Id)
+        {
+            var paths = Context.Attachments.Where(e => e.TaskId.Equals(Id)).Select(e => $"{e.Path}");
+            return paths;
+        }
+
+        public IEnumerable<string> GetAllAttachmentsNames(int Id)
+        {
+            var names = Context.Attachments.Where(e => e.TaskId.Equals(Id)).Select(e => $"{e.Name}");
+            return names;
+        }
+
+        public Dictionary<string, string> GetAttachmentsStrings(int Id)
+        {
+            var strings = Context.Attachments.Where(e => e.TaskId.Equals(Id)).Select(e => new {name = e.Name, path = e.Path });
+            Dictionary<string, string> dict = new Dictionary<string, string>();
+            foreach (var obj in strings){
+                dict.Add(obj.name, obj.path);
+            }
+            return dict;
         }
     }
 }

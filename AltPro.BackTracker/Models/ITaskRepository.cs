@@ -21,6 +21,14 @@ namespace AltPro.BackTracker.Models
 
         public IEnumerable<CommentModel> GetAllComments(int taskId);
 
+        public IEnumerable<string> GetAllAttachmentsPaths(int Id);
+
+        public IEnumerable<string> GetAllAttachmentsNames(int Id);
+
+        public IEnumerable<TaskModel> GetAlLUserTasks(string Id);
+
+        public Dictionary<string, string> GetAttachmentsStrings(int Id);
+
         public CommentModel AddComment(CommentModel comment);
     }
 }

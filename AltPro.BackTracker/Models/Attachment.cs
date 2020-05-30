@@ -18,6 +18,9 @@ namespace AltPro.BackTracker.Models
         public TaskModel TaskModel {get; set;}
 
         [Required]
+        public string Name { get; set; }
+
+        [Required]
         public string Path { get; set; }
     }
 }
