@@ -33,7 +33,8 @@
             </div>
             <div class="form-group">
                 <a class="btn btn-primary" asp-controller="home" asp-action="ReportList"> Back</a>
-                
+                <input type="button" title="Assign to Me" value="Assign to Me" class="btn btn-primary" 
+                           onclick="location.href='@Url.Action("AssignToMe", "Home", new { id = Model.Id })'" />
             </div>
         </form>
     </div>
