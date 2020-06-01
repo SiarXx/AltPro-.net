@@ -291,15 +291,34 @@ namespace AltPro.BackTracker.Controllers
             TaskModel taskToEdit = reportRepository.GetTask(id);
             TaskModel task = reportRepository.GetTask(id);
 
+           
+                task.TaskTitle = taskToEdit.TaskTitle;
+                task.AssignedID = User.Identity.GetUserId();
+                task.ModuleName = taskToEdit.ModuleName.ToString();
+                task.TaskPriority = taskToEdit.TaskPriority;
+                task.TaskState = ETaskState.Assigned;
+                task.Description = taskToEdit.Description;
+                reportRepository.Edit(task);
+                SendMail(task.ReporterID, User.Identity.GetUserId(), task.TaskTitle);
+            
+
+            return RedirectToAction("ReportList");
+        }
+
+        public IActionResult ResolveTask(int id) 
+        {
+            TaskModel taskToEdit = reportRepository.GetTask(id);
+            TaskModel task = reportRepository.GetTask(id);
+
             task.TaskTitle = taskToEdit.TaskTitle;
             task.AssignedID = User.Identity.GetUserId();
             task.ModuleName = taskToEdit.ModuleName.ToString();
             task.TaskPriority = taskToEdit.TaskPriority;
-            task.TaskState = ETaskState.Assigned;
+            task.TaskState = ETaskState.Resolved;
             task.Description = taskToEdit.Description;
             reportRepository.Edit(task);
             SendMail(task.ReporterID, User.Identity.GetUserId(), task.TaskTitle);
-           
+
 
             return RedirectToAction("ReportList");
         }
