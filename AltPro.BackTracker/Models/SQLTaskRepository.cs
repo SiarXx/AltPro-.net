@@ -20,7 +20,7 @@ namespace AltPro.BackTracker.Models
             return taskModel;
         }
 
-        public Attachment Add(Attachment attachment)
+        public FileAttachment Add(FileAttachment attachment)
         {
             Context.Attachments.Add(attachment);
             Context.SaveChanges();

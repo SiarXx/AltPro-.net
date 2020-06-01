@@ -13,7 +13,7 @@ namespace AltPro.BackTracker.Models
 
         TaskModel Add(TaskModel taskModel);
 
-        Attachment Add(Attachment attachment);
+        FileAttachment Add(FileAttachment attachment);
 
         TaskModel Edit(TaskModel taskModel);
 

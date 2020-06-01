@@ -59,7 +59,7 @@ namespace AltPro.BackTracker.Controllers
                         string filePath = Path.Combine(uplodasFolder, uniqueFileName);
                         file.CopyTo(new FileStream(filePath, FileMode.Create));
 
-                        Attachment attachment = new Attachment()
+                        FileAttachment attachment = new FileAttachment()
                         {
                             Path = uniqueFileName,
                             TaskId = task.TaskModelId,

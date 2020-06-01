@@ -20,7 +20,7 @@ namespace AltPro.BackTracker.Models
 
         public DbSet<TaskModel> TaskModels { get; set; }
 
-        public DbSet<Attachment> Attachments { get; set; }
+        public DbSet<FileAttachment> Attachments { get; set; }
 
         public DbSet<CommentModel> CommentModels { get; set; }
 
