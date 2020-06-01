@@ -18,6 +18,7 @@ using Microsoft.AspNet.Identity;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using AltPro.BackTracker.Models.Enums;
+using System.Net.Mail;
 
 namespace AltPro.BackTracker.Controllers
 {
@@ -28,7 +29,6 @@ namespace AltPro.BackTracker.Controllers
         private ITaskRepository reportRepository;
         private readonly IWebHostEnvironment HostEnvironment;
         private readonly Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> userManage;
-        private readonly AppDBContext Context;
 
         public HomeController(IWebHostEnvironment webHostEnvironment,
             Microsoft.AspNetCore.Identity.UserManager<ApplicationUser> userManager,
@@ -120,10 +120,11 @@ namespace AltPro.BackTracker.Controllers
         public IActionResult UserReportList()
         {
             var tasks = new List<TaskModel>();
-            var querry = reportRepository.GetAllTasks().Where(s => s.ReporterID.Equals(User.Identity.GetUserId())|| s.AssignedID.Equals(User.Identity.GetUserId()));
+            var querry = reportRepository.GetAlLUserTasks(User.Identity.GetUserId());
             tasks = querry.ToList();
             return View(tasks);
         }
+
         public IActionResult Index()
         {
             return View();
@@ -135,6 +136,8 @@ namespace AltPro.BackTracker.Controllers
             TaskModel taskModel = reportRepository.GetTask(id);
             Enum.TryParse(taskModel.ModuleName, out EModule module);
 
+            var attachmentStrings = reportRepository.GetAttachmentsStrings(id);
+
             TaskEditViewModel editTaskModel = new TaskEditViewModel
             {
                 Id = id,
@@ -143,8 +146,8 @@ namespace AltPro.BackTracker.Controllers
                 ModuleName = module,
                 TaskPriority = taskModel.TaskPriority,
                 Description = taskModel.Description,
-                Comments = LoadComments(id)
-
+                Comments = LoadComments(id),
+                AttachmentStrings = attachmentStrings
             };
             return View(editTaskModel);
         }
@@ -162,6 +165,8 @@ namespace AltPro.BackTracker.Controllers
                     TaskId = model.Id
                 };
                 reportRepository.AddComment(comment);
+                TaskModel task = reportRepository.GetTask(model.Id);
+                SendMail(task.ReporterID, task.AssignedID, task.TaskTitle);
             }
 
             return TaskView(model.Id);
@@ -189,14 +194,36 @@ namespace AltPro.BackTracker.Controllers
             if (ModelState.IsValid)
             {
                 TaskModel task = reportRepository.GetTask(model.Id);
+                string uniqueFileName = null;
+
                 task.TaskTitle = model.Title;
-                task.AssignedID = model.AssignedID;
+                task.AssignedID = task.AssignedID;
                 task.ModuleName = model.ModuleName.ToString();
                 task.TaskPriority = model.TaskPriority;
                 task.TaskState = ETaskState.Reported;
                 task.Description = model.Description;
 
+                if (model.Attachemnts != null && model.Attachemnts.Count > 0)
+                {
+                    foreach (IFormFile file in model.Attachemnts)
+                    {
+                        string uplodasFolder = Path.Combine(HostEnvironment.WebRootPath, "attachments");
+                        uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
+                        string filePath = Path.Combine(uplodasFolder, uniqueFileName);
+                        file.CopyTo(new FileStream(filePath, FileMode.Create));
+
+                        FileAttachment attachment = new FileAttachment()
+                        {
+                            Path = uniqueFileName,
+                            TaskId = task.TaskModelId,
+                            Name = file.FileName
+                        };
+                        reportRepository.Add(attachment);
+                    }
+                }
+
                 reportRepository.Edit(task);
+                SendMail(task.ReporterID, task.AssignedID, task.TaskTitle);
                 return RedirectToAction("ReportList");
             }
             return View();
@@ -248,7 +275,90 @@ namespace AltPro.BackTracker.Controllers
             var comments = reportRepository.GetAllComments(id).ToList();
             return comments;
         }
-        
+
+        public ActionResult DownloadFile(string path)
+        {
+            //string path = AppDomain.CurrentDomain.BaseDirectory + "FolderName/";
+            string fileFolder = Path.Combine(HostEnvironment.WebRootPath, "attachments");
+            byte[] fileBytes = System.IO.File.ReadAllBytes(Path.Combine(fileFolder, path));
+            //string fileName = "filename.extension";
+            return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet);
+        }
+
+        [HttpGet]
+        public IActionResult AssignToMe(int id)
+        {
+            TaskModel taskToEdit = reportRepository.GetTask(id);
+            TaskModel task = reportRepository.GetTask(id);
+
+            if (task.TaskState != ETaskState.Resolved)
+            {
+                task.TaskTitle = taskToEdit.TaskTitle;
+                task.AssignedID = User.Identity.GetUserId();
+                task.ModuleName = taskToEdit.ModuleName.ToString();
+                task.TaskPriority = taskToEdit.TaskPriority;
+                task.TaskState = ETaskState.Assigned;
+                task.Description = taskToEdit.Description;
+                reportRepository.Edit(task);
+                SendMail(task.ReporterID, User.Identity.GetUserId(), task.TaskTitle);
+            }
+
+            return RedirectToAction("ReportList");
+        }
+
+        public IActionResult ResolveTask(int id) 
+        {
+            TaskModel taskToEdit = reportRepository.GetTask(id);
+            TaskModel task = reportRepository.GetTask(id);
+
+            task.TaskTitle = taskToEdit.TaskTitle;
+            task.AssignedID = taskToEdit.AssignedID;
+            task.ModuleName = taskToEdit.ModuleName.ToString();
+            task.TaskPriority = taskToEdit.TaskPriority;
+            task.TaskState = ETaskState.Resolved;
+            task.Description = taskToEdit.Description;
+            reportRepository.Edit(task);
+            SendMail(task.ReporterID, User.Identity.GetUserId(), task.TaskTitle);
+
+
+            return RedirectToAction("ReportList");
+        }
+
+        async private void SendMail(string ownerId, string assignedId, string taskTitle)
+        {
+
+            var owner = userManage.FindByIdAsync(ownerId).Result;
+
+            try
+            {
+                SmtpClient client = new SmtpClient("smtp.gmail.com", 587);
+                MailMessage message = new MailMessage();
+                message.From = new MailAddress("sendnotifiactionemail@gmail.com");
+                message.To.Add(owner.Email);
+
+                if (assignedId != null)
+                {
+                    var assigned = userManage.FindByIdAsync(assignedId).Result;
+                    message.To.Add(assigned.Email);
+
+                }
+
+                message.Subject = "Zmiany w " + taskTitle;
+                message.Body = "W tasku " + taskTitle + " zostały wprowadozne zmiany";
+                client.UseDefaultCredentials = false;
+                client.EnableSsl = true;
+                client.Credentials = new System.Net.NetworkCredential("sendnotifiactionemail@gmail.com", "H4$l00!qAz");
+                client.Send(message);
+                message = null;
+
+
+            }
+
+            catch (Exception ex)
+            {
+
+            }
+        }
 
     }
 }

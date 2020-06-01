@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace AltPro.BackTracker.Models
 {
-    public class Attachment
+    public class FileAttachment
     {
         public int Id { get; set; }
 
@@ -16,6 +16,9 @@ namespace AltPro.BackTracker.Models
         [ForeignKey("TaskModel")]
         public int TaskId { get; set; }
         public TaskModel TaskModel {get; set;}
+
+        [Required]
+        public string Name { get; set; }
 
         [Required]
         public string Path { get; set; }
