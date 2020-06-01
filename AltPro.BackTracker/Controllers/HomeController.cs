@@ -295,7 +295,7 @@ namespace AltPro.BackTracker.Controllers
             task.AssignedID = User.Identity.GetUserId();
             task.ModuleName = taskToEdit.ModuleName.ToString();
             task.TaskPriority = taskToEdit.TaskPriority;
-            task.TaskState = ETaskState.Reported;
+            task.TaskState = ETaskState.Assigned;
             task.Description = taskToEdit.Description;
             reportRepository.Edit(task);
             SendMail(task.ReporterID, User.Identity.GetUserId(), task.TaskTitle);
