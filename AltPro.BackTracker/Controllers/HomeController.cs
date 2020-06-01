@@ -197,7 +197,7 @@ namespace AltPro.BackTracker.Controllers
                 string uniqueFileName = null;
 
                 task.TaskTitle = model.Title;
-                task.AssignedID = model.AssignedID;
+                task.AssignedID = task.AssignedID;
                 task.ModuleName = model.ModuleName.ToString();
                 task.TaskPriority = model.TaskPriority;
                 task.TaskState = ETaskState.Reported;
