@@ -25,6 +25,8 @@
                 <a asp-action="EditTask" asp-controller="Home"
                    asp-route-id="@report.TaskModelId"
                    class="btn btn-primary m-1 text-center">Edit</a>
+                <input type="button" title="Resolve" value="Resolve" class="btn btn-primary"
+                       onclick="location.href='@Url.Action("ResolveTask", "Home", new { id = @report.TaskModelId })'" />
                 <a asp-action="DeleteTask" asp-controller="Home"
                    asp-route-id="@report.TaskModelId"
                    method="post"

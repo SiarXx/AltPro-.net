@@ -312,7 +312,7 @@ namespace AltPro.BackTracker.Controllers
             TaskModel task = reportRepository.GetTask(id);
 
             task.TaskTitle = taskToEdit.TaskTitle;
-            task.AssignedID = User.Identity.GetUserId();
+            task.AssignedID = taskToEdit.AssignedID;
             task.ModuleName = taskToEdit.ModuleName.ToString();
             task.TaskPriority = taskToEdit.TaskPriority;
             task.TaskState = ETaskState.Resolved;
