@@ -291,7 +291,8 @@ namespace AltPro.BackTracker.Controllers
             TaskModel taskToEdit = reportRepository.GetTask(id);
             TaskModel task = reportRepository.GetTask(id);
 
-           
+            if (task.TaskState != ETaskState.Resolved)
+            {
                 task.TaskTitle = taskToEdit.TaskTitle;
                 task.AssignedID = User.Identity.GetUserId();
                 task.ModuleName = taskToEdit.ModuleName.ToString();
@@ -300,7 +301,7 @@ namespace AltPro.BackTracker.Controllers
                 task.Description = taskToEdit.Description;
                 reportRepository.Edit(task);
                 SendMail(task.ReporterID, User.Identity.GetUserId(), task.TaskTitle);
-            
+            }
 
             return RedirectToAction("ReportList");
         }
