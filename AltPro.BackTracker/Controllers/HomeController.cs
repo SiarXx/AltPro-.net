@@ -18,6 +18,7 @@ using Microsoft.AspNet.Identity;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using AltPro.BackTracker.Models.Enums;
+using System.Net.Mail;
 
 namespace AltPro.BackTracker.Controllers
 {
@@ -296,6 +297,42 @@ namespace AltPro.BackTracker.Controllers
             reportRepository.Edit(task);
 
             return RedirectToAction("ReportList");
+        }
+
+        async private void SendMail(string ownerId, string assignedId, string taskTitle)
+        {
+
+            var owner = userManage.FindByIdAsync(ownerId).Result;
+
+            try
+            {
+                SmtpClient client = new SmtpClient("smtp.gmail.com", 587);
+                MailMessage message = new MailMessage();
+                message.From = new MailAddress("sendnotifiactionemail@gmail.com");
+                message.To.Add(owner.Email);
+
+                if (assignedId != null)
+                {
+                    var assigned = userManage.FindByIdAsync(assignedId).Result;
+                    message.To.Add(assigned.Email);
+
+                }
+
+                message.Subject = "Zmiany w " + taskTitle;
+                message.Body = "W tasku " + taskTitle + " zostały wprowadozne zmiany";
+                client.UseDefaultCredentials = false;
+                client.EnableSsl = true;
+                client.Credentials = new System.Net.NetworkCredential("sendnotifiactionemail@gmail.com", "H4$l00!qAz");
+                client.Send(message);
+                message = null;
+
+
+            }
+
+            catch (Exception ex)
+            {
+
+            }
         }
 
     }
