@@ -165,6 +165,8 @@ namespace AltPro.BackTracker.Controllers
                     TaskId = model.Id
                 };
                 reportRepository.AddComment(comment);
+                TaskModel task = reportRepository.GetTask(model.Id);
+                SendMail(task.ReporterID, task.AssignedID, task.TaskTitle);
             }
 
             return TaskView(model.Id);
@@ -221,6 +223,7 @@ namespace AltPro.BackTracker.Controllers
                 }
 
                 reportRepository.Edit(task);
+                SendMail(task.ReporterID, task.AssignedID, task.TaskTitle);
                 return RedirectToAction("ReportList");
             }
             return View();
@@ -295,6 +298,8 @@ namespace AltPro.BackTracker.Controllers
             task.TaskState = ETaskState.Reported;
             task.Description = taskToEdit.Description;
             reportRepository.Edit(task);
+            SendMail(task.ReporterID, User.Identity.GetUserId(), task.TaskTitle);
+           
 
             return RedirectToAction("ReportList");
         }
